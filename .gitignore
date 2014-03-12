@@ -1,1 +1,3 @@
 config/
+StatSocial/application/config/config.php
+StatSocial/application/config/database.php
