@@ -15,6 +15,8 @@ class Auth {
     
     // rejection time in seconds after 5 failed login attempts
     private $_timeout_time = 30;
+    // layer for crypting, see php.net for more info.
+    private $_crypting_layer = '$2y$06$';
     
     /**
     * Constructor for class Auth
@@ -28,9 +30,11 @@ class Auth {
         get_instance()->load->driver('session');
         // load the user model, needed for any model adjusting
         get_instance()->load->model('user_model');
+        // load the throttle model, needed for throttle methods.
+        get_instance()->load->model('throttle_model');
     }
     
-    // -----------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
     * Method for loggin in a user
@@ -44,42 +48,51 @@ class Auth {
     public function login($email, $password)
     {
         // check if the submitted email is with any user..
-        $user = get_instance()->user_model->get("email", $email);
-        
+       $user = get_instance()->user_model->get("email", $email);
+       
         // if we have any user, let's continue
         if ( ! empty($user))
         {    
+            // get throttle information
+            $throttle = get_instance()->throttle_model->get(array("user" => $user->id, "ipaddress" => get_instance()->input->ip_address()));
+            
             // check, did we exceed the max amount of login attempts or did this timeout already exceed?
-            if ($user->attempts < 5 || time() > $user->last_attempt + $this->_timeout_time)
+            if (empty($throttle) || (int)$throttle->attempts < 5 || time() > (int)$throttle->last_attempt + $this->_timeout_time)
             {
                 // last check if the password is the same as the encrypted one from the database.
-                if (crypt($password, $user->password) === $user->password)            
+                if (crypt($password, $this->_crypting_layer.$user->password) === $this->_crypting_layer.$user->password)            
                 {
                     // update te user information for the session.
                     $this->update($user);
                     // update the user data in the database..
-                    get_instance()->user_model->update($user->id, array('last_login' => time(), "attempts" => 0), TRUE);
+                    get_instance()->user_model->update($user->id, array('last_login' => time()), TRUE);
+                    get_instance()->throttle_model->delete(array("user" => $user->id, "ipaddress" => get_instance()->input->ip_address()));
                     // return TRUE since we logged in suscesfully.
                     return TRUE;
                 }    
-                      
-                // check if the time exceeded the timeout? if so we reset this information.
-                if (time() > $user->last_attempt + $this->_timeout_time)
-                {
-                    $attempts = 1;
+                
+                // check if we have any throttle information
+                if ( ! empty($throttle))
+                {      
+                    // check if the time exceeded the timeout? if so we reset this information.
+                    if (time() > (int)$throttle->last_attempt + $this->_timeout_time)
+                    {
+                        get_instance()->throttle_model->update(array("user" => $user->id, "ipaddress" => get_instance()->input->ip_address()), array("attempts" => 1, "last_attempt" => time())); 
+                    }
+                    else
+                    {
+                        get_instance()->throttle_model->update(array("user" => $user->id, "ipaddress" => get_instance()->input->ip_address()), array("attempts" => (int)$throttle->attempts + 1, "last_attempt" => time()));  
+                    }
                 }
                 else
                 {
-                    $attempts = $user->attempts + 1;    
+                    get_instance()->throttle_model->insert(array("user" => $user->id, "ipaddress" => get_instance()->input->ip_address(), "attempts" => 1, "last_attempt" => time()));    
                 }
-                
-                // set this information, we use one method to avoid extra lines of code for reuse.
-                get_instance()->user_model->update($user->id, array("last_attempt" => time(), "attempts" => $attempts), TRUE);
             }
             else
             {
                 // return information about timeout, maximum amount of try's exceeded... wait X seconds.
-            return 'Aantal inlog pogingen overschreden,<br> probeer het over <strong>'.(($user->last_attempt + $this->_timeout_time) - time()).' seconden</strong> opnieuw.';    
+                return 'Aantal inlog pogingen overschreden,<br> probeer het over <strong>'.(((int)$throttle->last_attempt + $this->_timeout_time) - time()).' seconden</strong> opnieuw.';    
             }
         }
         
@@ -144,6 +157,20 @@ class Auth {
     // -----------------------------------------------------------------------
     
     /**
+    * Method for retrieving the last login moment.
+    * 
+    * @access public
+    * @returns int $last_login
+    */
+    public function last_login()
+    {
+        $session = get_instance()->session->userdata('auth');
+        return $session['last_login'];
+    }
+    
+    // -----------------------------------------------------------------------
+    
+    /**
     * Method for updating user information in the session.
     * 
     * @access public
@@ -152,11 +179,14 @@ class Auth {
     */
     public function update($user = null)
     {
-        if (empty($user))
+        // check if we received a user
+        if (empty($user))             
         {
+            // if not we will try to get it from the current logged in user..
             $user = get_instance()->user_model->get($this->id());
         }
         
+        // if we did not receive a user or could not get it... skip this!
         if ( ! empty($user))
         {
             $data['id']         = $user->id;
@@ -168,6 +198,7 @@ class Auth {
             return TRUE;
         }
         
+        // just logout to make sure every "maybe" existing data is erased.
         $this->logout();
         return FALSE;
     }
@@ -183,6 +214,7 @@ class Auth {
     */
     public function hash($password)
     {
-        return crypt($password, '$2y$6$'.bin2hex(openssl_random_pseudo_bytes(22)));
+        // we substract the crypting algoritme and the amount of rounds from the password...
+        return substr(crypt($password, $this->_crypting_layer.bin2hex(openssl_random_pseudo_bytes(22))), strlen($this->_crypting_layer));
     }
 }

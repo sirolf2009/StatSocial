@@ -1,18 +1,46 @@
 <?php defined("BASEPATH") OR exit("No direct script access allowed."); 
 
+/**
+* MY_Model, model class for easy model use.
+* 
+* @package      Codeigniter
+* @subpackage   Core
+* @category     Core
+* @author       Ditmar Commandeur 
+*/
 class MY_Model extends CI_Model {
     
+    // table name, if not set this class will guess based on model name.
     protected $table = NULL;
+    // primary key value, if more then one primary key.. set the first one.
     protected $primary_key = 'id';
+    // all the fields used for this model, fields not declared will not be accesable
     protected $fields = array();
+    // validation rules based on Codeigniter's Form_Validation library
     protected $validate = array();
+    // should we skip validation?
     protected $skip_validation = FALSE;
     
+    /**
+    * Constructor method, just constructs the CI_Model for now
+    * 
+    * @returns ::self
+    */
     public function __construct()
     {
         parent::__construct();
     }
     
+    // ------------------------------------------------------------------------
+    
+    /**
+    * Magic method for calling database functions
+    * 
+    * @param mixed $method
+    * @param mixed $params
+    * @access public
+    * @return $this > MY_Model
+    */
     public function __call($method, $params)
     {
         if (method_exists($this->db, $method))
@@ -22,18 +50,49 @@ class MY_Model extends CI_Model {
         }
     }
     
+    // ------------------------------------------------------------------------
+    
+    /**
+    * Method for getting a row/record
+    * 
+    * @param mixed (func_get_args)
+    * @access public
+    * @return object
+    */
     public function get()
     {
+        $this->db->select($this->_fields());
         $this->_set_where(func_get_args());
         return $this->db->get($this->_table())->row();
     }
     
+    // ------------------------------------------------------------------------
+    
+    /**
+    * Method for getting all the results
+    * 
+    * @param mixed (func_get_args)
+    * @access public
+    * @return array (object)
+    */
     public function get_all()
     {
+        $this->db->select($this->_fields());
         $this->_set_where(func_get_args());
         return $this->db->get($this->_table())->result();
     }
     
+    // ------------------------------------------------------------------------
+    
+    /**
+    * Method for inserting a new row/record
+    * 
+    * @param mixed $data
+    * @param mixed $skip_validation
+    * @access public
+    * @return int (insert_id) < TRUE
+    * @return FALSE
+    */
     public function insert($data, $skip_validation = FALSE)
     {
         $valid = TRUE;
@@ -53,6 +112,18 @@ class MY_Model extends CI_Model {
         return FALSE;
     }
     
+    // ------------------------------------------------------------------------
+    
+    /**
+    * Method for updating a row/record
+    * 
+    * @param mixed $primary_value
+    * @param mixed $data
+    * @param mixed $skip_validation
+    * @access public
+    * @return int (affected_rows) < TRUE
+    * @return boolean FALSE
+    */
     public function update($primary_value, $data, $skip_validation = FALSE)
     {
         $valid = TRUE;
@@ -65,13 +136,23 @@ class MY_Model extends CI_Model {
         if ($valid)
         {
             $data = array_intersect_key($data, array_flip($this->_fields()));
-            $this->db->where($this->primary_key, $primary_value)->set($data)->update($this->_table());
+            $this->_set_where($primary_value);
+            $this->db->set($data)->update($this->_table());
             return $this->db->affected_rows();
         }
         
         return FALSE;
     }
     
+    // ------------------------------------------------------------------------
+    
+    /**
+    * Option for deleting a row (model)
+    * 
+    * @param mixed (func_get_args)
+    * @access public
+    * @return int (affected_rows)
+    */
     public function delete()
     {
         $this->_set_where(func_get_args());
@@ -79,12 +160,31 @@ class MY_Model extends CI_Model {
         return $this->db->affected_rows();
     }
     
+    // ------------------------------------------------------------------------
+    
+    /**
+    * Option for setting the skip_validation value
+    * 
+    * @param mixed $bool
+    * @access public
+    * @return $this > MY_Model
+    */
     public function validate($bool = TRUE)
     {
         $this->skip_validaiton = $bool;
         return $this;
     }
+
+    // ------------------------------------------------------------------------
     
+    /**
+    * Validation method based on data submitted
+    * checks if the data submitted validates on the rules set
+    * 
+    * @param mixed $data
+    * @access private
+    * @returns boolean
+    */
     private function _run_validation($data)
     {
         if ($this->skip_validation)
@@ -116,6 +216,20 @@ class MY_Model extends CI_Model {
         return TRUE;    
     }
     
+    // ------------------------------------------------------------------------
+    
+    /**
+    * Set where information based on params
+    * options can be:
+    * - 1 param where(primary_key => $param)
+    * - 2 param where(param[0], param[1])
+    * - 2 param where(array(param))
+    * - 2 param where_in(param[0], param[1])
+    * 
+    * @param mixed $params
+    * @access private
+    * @return NULL
+    */
     private function _set_where($params)
     {
         if (count($params) == 1)
@@ -131,7 +245,11 @@ class MY_Model extends CI_Model {
         }
         elseif (count($params) == 2)
         {
-            if (is_array($params[1]))
+            if ( ! isset($params[1]))
+            {
+                $this->db->where($params);
+            }
+            elseif (is_array($params[1]))
             {
                 $this->db->where_in($params[0], $params[1]);
             }
@@ -142,6 +260,15 @@ class MY_Model extends CI_Model {
         }
     }
     
+    // ------------------------------------------------------------------------
+    
+    /**
+    * Returns all the fields for this model
+    * if no fields are set, field information is retrieved from the database
+    * 
+    * @access private
+    * @returns array $fields
+    */
     private function _fields()
     {
         if ($this->_table() && empty($this->fields))
@@ -152,6 +279,15 @@ class MY_Model extends CI_Model {
         return $this->fields;
     }
     
+    // ------------------------------------------------------------------------
+    
+    /**
+    * Function for getting the table name,
+    * if no table name is set we will gues it based on model name.
+    * 
+    * @access private
+    * @return $table_name
+    */
     private function _table()
     {
         if ($this->table == NULL)

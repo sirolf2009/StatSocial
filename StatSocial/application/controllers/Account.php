@@ -6,7 +6,7 @@ class Account extends CI_Controller {
     {
         if ($this->auth->is())
         {
-            redirect('account/settings');    
+            redirect('dashboard');    
         }
         
         $error = FALSE;
@@ -15,7 +15,8 @@ class Account extends CI_Controller {
         {
             if (($error = $this->auth->login($this->input->post('email'), $this->input->post('password'))) === TRUE)
             {
-                redirect('account/settings');
+                create_alert("info", "Welkom terug <strong>{$this->auth->name()}</strong>, je laatste keer was op ".date('d-m-Y', $this->auth->last_login())." om ".date("H:i", $this->auth->last_login()));
+                redirect('dashboard');
             }
         }
         
@@ -47,7 +48,8 @@ class Account extends CI_Controller {
             }
         }
         
-        $this->load->view('layout/header', array('title' => 'Settings'));
+        $this->load->view('layout/header', array('title' => 'Gegevens'));
+        $this->load->view('layout/nav', array());
         $this->load->view('pages/account/settings', array('user' => $this->user_model->get($this->auth->id())));
         $this->load->view('layout/footer', array());
     }

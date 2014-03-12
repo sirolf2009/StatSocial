@@ -4,7 +4,7 @@ class User_Model extends MY_Model {
     
     protected $table = 'user';
     protected $primary_key = 'id';
-    protected $fields = array('id', 'name', 'email', 'password', 'attempts', 'last_login', 'last_attempt');
+    protected $fields = array('id', 'name', 'email', 'password', 'last_login');
     
     public function update($primary_value, $data, $skip_validation = FALSE)
     {
