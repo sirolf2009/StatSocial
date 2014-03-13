@@ -40,7 +40,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://statsocial.dcs';
+$config['base_url']	= '';
 
 /*
 |--------------------------------------------------------------------------
