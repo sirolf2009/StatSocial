@@ -14,6 +14,20 @@ class Socialdata extends CI_Controller {
     
     public function index()
     {
+        $this->load->driver('request');
+        
+        // twitter voorbeeld
+        // $this->request->select_driver('twitter');
+        // $this->request->get(array('q' => 'file A2', 'result_type' => 'recent', 'lang' => 'nl'))
+        
+        // facebook voorbeeld
+        // $this->request->select_driver('facebook');
+        // $this->request->get(array('q' => 'file A2', 'type' => 'post'));
+        
+        // ndw voorbeeld
+        //$this->request->select_driver('ndw');
+        // $this->request->get();
+        
         $this->load->view('layout/header', array('title' => 'Socialdata'));
         $this->load->view('layout/nav', array());
         $this->load->view('pages/socialdata', array());
