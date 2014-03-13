@@ -4,7 +4,7 @@ class Migration_Add_log extends CI_Migration {
     
     public function up()
     {
-        $this->dbforge->drop_table('log');
+        $this->dbforge->drop_table('logs');
         
         $fields = array('id' => array('type' => 'INT', 'constraint' => 11, 'null' => FALSE, 'auto_increment' => TRUE),
                         'type' => array('type' => 'ENUM', 'constraint' => array('FACEBOOK', 'TWITTER', 'NDW'), 'null' => FALSE),
@@ -13,11 +13,11 @@ class Migration_Add_log extends CI_Migration {
                         'date' => array('type' => 'INT', 'constraint' => 10, 'null' => FALSE));
         $this->dbforge->add_field($fields);
         $this->dbforge->add_key("id", TRUE);
-        $this->dbforge->create_table("log");
+        $this->dbforge->create_table("logs");
     }
     
     public function down()
     {
-        $this->dbforge->drop_table('log');    
+        $this->dbforge->drop_table('logs');    
     }
 }

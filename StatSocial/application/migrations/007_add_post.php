@@ -4,7 +4,7 @@ class Migration_Add_post extends CI_Migration {
     
     public function up()
     {
-        $this->dbforge->drop_table('post');
+        $this->dbforge->drop_table('posts');
         
         $fields = array('id' => array('type' => 'INT', 'constraint' => 11, 'null' => FALSE, 'auto_increment' => TRUE),
                         'post_id' => array('type' => 'INT', 'constraint' => 20, 'null' => FALSE),
@@ -16,11 +16,11 @@ class Migration_Add_post extends CI_Migration {
                         'date' => array('type' => 'INT', 'constraint' => 10, 'null' => FALSE));
         $this->dbforge->add_field($fields);
         $this->dbforge->add_key("id", TRUE);
-        $this->dbforge->create_table("post");    
+        $this->dbforge->create_table("posts");    
     }
     
     public function down()
     {
-        $this->dbforge->drop_table('post');     
+        $this->dbforge->drop_table('posts');     
     }
 }

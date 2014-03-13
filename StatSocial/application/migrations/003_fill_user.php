@@ -9,12 +9,12 @@ class Migration_Fill_user extends CI_Migration {
                       array('id' => 3, 'name' => 'Coen den Engelsman', 'email' => 'coendenengelsman@gmail.com', 'password' => 'c98340ab30eb403792c0auPAz3Fmr718DzJAVQEBA1T7ZuuNfbEv.', 'last_login' => 1394540788),
                       array('id' => 4, 'name' => 'Gokhan Kacan', 'email' => 'gokhankacan83@gmail.com', 'password' => '97cdb01333a62d764f48bufb4JFE9u0YzBE/AY7SaWzfJzGyEmIUa', 'last_login' => 1394540788));
         
-        $this->db->insert_batch('user', $data);        
+        $this->db->insert_batch('users', $data);        
     }
 
     public function down()
     {
         $this->db->where_in('id', array(1, 2, 3, 4));
-        $this->db->delete('user');    
+        $this->db->delete('users');    
     }
 }
