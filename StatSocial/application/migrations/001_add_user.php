@@ -4,6 +4,8 @@ class Migration_Add_user extends CI_Migration {
     
     public function up()
     {
+        $this->dbforge->drop_table('user');
+        
         $fields = array('id' => array('type' => 'INT', 'constraint' => 11, 'null' => FALSE, 'auto_increment' => TRUE),
                         'name' => array('type' => 'VARCHAR', 'constraint' => 100, 'null' => FALSE),
                         'email' => array('type' => 'VARCHAR', 'constraint' => 100, 'null' => FALSE),
