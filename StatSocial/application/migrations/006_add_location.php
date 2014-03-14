@@ -4,6 +4,8 @@ class Migration_Add_location extends CI_Migration {
     
     public function up()
     {
+        $this->dbforge->drop_table('locations');
+        
         $fields = array('id' => array('type' => 'INT', 'constraint' => 11, 'null' => FALSE, 'auto_increment' => TRUE),
                         'type' => array('type' => 'VARCHAR', 'constraint' => 50, 'null' => FALSE),
                         'roadnumber' => array('type' => 'VARCHAR', 'constraint' => 50, 'null' => FALSE),
@@ -12,11 +14,11 @@ class Migration_Add_location extends CI_Migration {
                         'second_name' => array('type' => 'VARCHAR', 'constraint' => 100, 'null' => TRUE));
         $this->dbforge->add_field($fields);
         $this->dbforge->add_key("id", TRUE);
-        $this->dbforge->create_table("location");
+        $this->dbforge->create_table("locations");
     }
     
     public function down()
     {
-        $this->dbforge->drop_table('location');    
+        $this->dbforge->drop_table('locations');    
     }
 }

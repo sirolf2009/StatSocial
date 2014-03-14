@@ -4,6 +4,8 @@ class Migration_Add_throttle extends CI_Migration {
     
     public function up()
     {
+        $this->dbforge->drop_table('throttle');
+        
         $fields = array('user' => array('type' => 'INT', 'constraint' => 11, 'null' => FALSE),
                         'ipaddress' => array('type' => 'VARCHAR', 'constraint' => 50, 'null' => FALSE),
                         'attempts' => array('type' => 'INT', 'constraint' => 1, 'null' => TRUE),

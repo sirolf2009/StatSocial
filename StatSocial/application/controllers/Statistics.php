@@ -14,6 +14,10 @@ class Statistics extends CI_Controller {
     
     public function index()
     {
+        $this->load->library('sentiment');
+        
+        var_dump($this->sentiment->analyse("Echt ongelofelijk! Bus rijd voor mijn neus weg!"));
+        
         $this->load->view('layout/header', array('title' => 'Statistieken'));
         $this->load->view('layout/nav', array());
         $this->load->view('pages/statistics', array());

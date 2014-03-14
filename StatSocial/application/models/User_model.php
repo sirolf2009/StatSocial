@@ -2,7 +2,7 @@
 
 class User_Model extends MY_Model {
     
-    protected $table = 'user';
+    protected $table = 'users';
     protected $primary_key = 'id';
     protected $fields = array('id', 'name', 'email', 'password', 'last_login');
     

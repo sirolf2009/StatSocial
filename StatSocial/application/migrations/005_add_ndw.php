@@ -4,6 +4,8 @@ class Migration_Add_ndw extends CI_Migration {
     
     public function up()
     {
+        $this->dbforge->drop_table('ndw'); 
+        
         $fields = array('id' => array('type' => 'INT', 'constraint' => 11, 'null' => FALSE, 'auto_increment' => TRUE),
                         'location' => array('type' => 'INT', 'constraint' => 11, 'null' => FALSE),
                         'latitude' => array('type' => 'DECIMAL', 'constraint' => '10,8', 'null' => TRUE),
