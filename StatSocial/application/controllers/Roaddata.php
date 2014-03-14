@@ -28,21 +28,23 @@ class Roaddata extends CI_Controller {
 		$this->load->driver('request');
 		$this->request->select_driver('ndw');
 		$result = $this->request->get();
-		$ndw = array();
+		$ndw    = array();
 		foreach ($result->situation as $situation) {
-			$ndwRec          = array();
+			$ndwRec       = array();
 			$situationRec = $situation->situationRecord;
 
-			$location        = $situationRec->groupOfLocations->locationContainedInItinerary->location;
+			$location           = $situationRec->groupOfLocations->locationContainedInItinerary->location;
 			$ndwRec['location'] = null;
 			if (isset($location->alertCLinear->alertCMethod4PrimaryPointLocation->alertCLocation->specificLocation)) {
 				$ndwRec['location'] = (int)$location->alertCLinear->alertCMethod4PrimaryPointLocation->alertCLocation->specificLocation;
+			} else {
+				continue;
 			}
 
 			$ndwRec['latitude']  = (float)$location->locationForDisplay->latitude;
 			$ndwRec['longitude'] = (float)$location->locationForDisplay->longitude;
 
-			$cause              = $situationRec->cause;
+			$cause                 = $situationRec->cause;
 			$ndwRec['type']        = (string)$cause->causeType;
 			$ndwRec['description'] = "";
 			if (isset($cause->causeDescription->values)) {

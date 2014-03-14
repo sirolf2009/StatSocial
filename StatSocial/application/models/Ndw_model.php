@@ -6,7 +6,7 @@ class Ndw_model extends MY_Model{
 
 	/**
 	 * Insert a batch of ndw records into the db
-	 * @param $data
+	 * @param array $data
 	 */
 	public function insertBatch($data){
 		$this->db->insert_batch($this->table, $data);
