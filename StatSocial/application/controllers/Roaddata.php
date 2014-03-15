@@ -12,12 +12,17 @@ class Roaddata extends CI_Controller {
 		if ($this->auth->is() !== true) {
 			redirect('/');
 		}
+
+		$this->load->model('Ndw_model');
 	}
 
 	public function index() {
+
+		$roadData = $this->Ndw_model->getWithLocation();
+
 		$this->load->view('layout/header', array('title' => 'Wegendata'));
 		$this->load->view('layout/nav', array());
-		$this->load->view('pages/roaddata', array());
+		$this->load->view('pages/roaddata', array("roadData"=> $roadData));
 		$this->load->view('layout/footer', array());
 	}
 
@@ -58,7 +63,6 @@ class Roaddata extends CI_Controller {
 			$ndw[] = $ndwRec;
 		}
 
-		$this->load->model('Ndw_model');
 		$this->Ndw_model->insertBatch($ndw); //TODO check duplication
 	}
 }
