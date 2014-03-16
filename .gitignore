@@ -5,3 +5,4 @@ StatSocial/application/config/database.php
 */.idea/*
 *.iml
 CI_phpStorm.php
+StatSocial/application/config/database.php
