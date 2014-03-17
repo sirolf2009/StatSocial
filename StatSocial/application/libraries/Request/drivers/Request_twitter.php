@@ -4,10 +4,10 @@ class CI_Request_twitter extends Request_driver {
 
     private $oauth;
     private $url                = 'https://api.twitter.com/1.1/search/tweets.json';
-    private $consumer_key       = 'QRJyzxWcuFAtElzPTVL0Q';
-    private $cunsumer_secret    = 'zV8WQjYLgkZfp0ENOUlDbClQSjN079ZNqvL4WJo';
-    private $access_token       = '2382342205-8cuIOebKGuGAkzcIsE5sMtTxApp2tNvKbgTkYgc';
-    private $access_secret      = 'aJen98mhbYw3B4exAy8g1ThR7jdN34mCNeIKLQ4OCFNcO';
+    private $consumer_key       = '';
+    private $cunsumer_secret    = '';
+    private $access_token       = '';
+    private $access_secret      = '';
     
     public function get(array $terms)
     {    
@@ -21,9 +21,7 @@ class CI_Request_twitter extends Request_driver {
         $oauth['oauth_version']         = '1.0';  
         $oauth['oauth_signature']       = base64_encode(hash_hmac('sha1', $this->build_base_string($this->url, 'GET', $oauth), rawurlencode($this->cunsumer_secret).'&'.rawurlencode($this->access_secret), TRUE));
         
-        $url = $this->url .= '?'.$this->http_build_query($terms); 
-        
-        return json_decode($this->http($url, array('Authorization: OAuth '.$this->http_build_query($oauth, ', ', TRUE))));
+        return json_decode($this->http($this->url.'?'.$this->http_build_query($terms), array('Authorization: OAuth '.$this->http_build_query($oauth, ', ', TRUE))));
     }
     
     private function build_base_string($url, $method, $params)

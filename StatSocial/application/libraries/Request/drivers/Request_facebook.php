@@ -9,9 +9,7 @@ class CI_Request_facebook extends Request_driver {
     public function get(array $terms)
     {                  
         // &fields=from.id,message,type,created_time <- filter...
-         
-        $url = $this->url .= '?'.$this->http_build_query($terms).'&access_token='.$this->app_id.'|'.$this->app_secret;
-                            
-        return json_decode($this->http($url));    
+        
+        return json_decode($this->http($this->url.'?'.$this->http_build_query($terms).'&access_token='.$this->app_id.'|'.$this->app_secret));    
     }    
 }

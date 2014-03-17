@@ -149,6 +149,20 @@ class CI_Request extends CI_Driver_Library {
         
         return $this->current->get($terms);
     }
+    
+    // ------------------------------------------------------------------------
+    
+    public function http_code()
+    {
+        return $this->current->http_code();    
+    }
+    
+    // ------------------------------------------------------------------------
+    
+    public function http_info()
+    {
+        return $this->current->http_info();
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -224,6 +238,20 @@ abstract class Request_driver extends CI_Driver {
         $this->_parent->select_driver(get_class($this));
         return parent::__call($method, $args);
     }
+    
+    // ------------------------------------------------------------------------
+    
+    public function http_code()
+    {
+        return $this->http_code;    
+    }
+    
+    // ------------------------------------------------------------------------
+    
+    public function http_info()
+    {
+        return $this->http_info;
+    }
 
     // ------------------------------------------------------------------------
 
@@ -248,9 +276,12 @@ abstract class Request_driver extends CI_Driver {
     * @return API results
     */
     protected function http($url, array $headers = array())
-    {
+    {         
+        $this->http_code = NULL;
+        $this->http_info = NULL;
+        
         $curl = curl_init();
-            
+ 
         curl_setopt($curl, CURLOPT_USERAGENT, 'StatSocial Requester');
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
         curl_setopt($curl, CURLOPT_TIMEOUT, 10);
