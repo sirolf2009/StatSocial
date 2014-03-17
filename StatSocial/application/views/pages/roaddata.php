@@ -2,6 +2,9 @@
 <div class="container">
     <?php echo alerts(); ?>
     <?php echo alert("warning", "Deze weg data is nog niet actueel en volledig!", FALSE); ?>
+	<p>
+		<a class="btn btn-primary" href="<?=site_url('roaddata/get')?>">Haal actuele data op</a>
+	</p>
 	<div class="table-responsive">
 		<table class="table">
 		<tr>

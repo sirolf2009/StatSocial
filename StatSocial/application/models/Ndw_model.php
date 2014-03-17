@@ -1,32 +1,44 @@
 <?php
-class Ndw_model extends MY_Model{
+
+class Ndw_model extends MY_Model {
 	protected $table = 'ndw';
 	protected $primary_key = 'id';
-	protected $fields = array('id', 'location', 'latitude', 'longitude', 'type', 'description', 'start_date', 'end_date', 'date');
+	protected $fields = array('id', 'situation_id', 'location', 'latitude', 'longitude', 'type', 'description', 'start_date', 'end_date', 'date');
 
 	/**
 	 * Insert a batch of ndw records into the db
 	 * @param array $data
 	 */
-	public function insertBatch($data){
+	public function insertBatch($data) {
 		$this->db->insert_batch($this->table, $data);
 	}
 
-	public function getWithLocation(){
-		$this->db->join("location", "ndw.location = location.id");
+	public function getWithLocation() {
+		$this->db->select("locations.*, ndw.*, locations.type as location_type");
+		$this->db->join("locations", "ndw.location = locations.id");
 		return $this->db->get("ndw")->result_array();
 	}
 
-	public  function getActualData() {
+	private function existId($situationId) {
+		$this->db->where("situation_id", $situationId);
+		$this->db->from('ndw');
+		return $this->db->count_all_results() == '0' ? false : true ;
+	}
+
+	public function getActualData() {
 		$this->load->driver('request');
 		$this->request->select_driver('ndw');
 		$result = $this->request->get();
 		$ndw    = array();
 		foreach ($result->situation as $situation) {
 
-			$ndwRec       = array();
+			$ndwRec = array();
+			if ($this->existId((string)$situation['id'])) {
+				continue;
+			}
 
 			$ndwRec["situation_id"] = (string)$situation['id'];
+
 			$situationRec = $situation->situationRecord;
 
 			$location           = $situationRec->groupOfLocations->locationContainedInItinerary->location;
@@ -53,7 +65,12 @@ class Ndw_model extends MY_Model{
 
 			$ndw[] = $ndwRec;
 		}
-
-		$this->Ndw_model->insertBatch($ndw); //TODO check duplication
+		if ($ndw) {
+			if (count($ndw) == 1) {
+				$this->insert($ndw[0]);
+			} else {
+				$this->insert($ndw);
+			}
+		}
 	}
-} 
+}

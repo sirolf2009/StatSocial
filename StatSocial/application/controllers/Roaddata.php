@@ -31,6 +31,7 @@ class Roaddata extends CI_Controller {
 	 */
 	public function get() {
 		$this->Ndw_model->getActualData();
+		redirect(site_url("roaddata"));
 	}
 
 }
