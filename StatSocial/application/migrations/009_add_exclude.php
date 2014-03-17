@@ -4,9 +4,9 @@ class Migration_Add_exclude extends CI_Migration {
     
     public function up()
     {
-        $this->dbforge->drop_table('excludes');
+        $this->dbforge->drop_table('excludes', TRUE);
         
-        $fields = array('social_id' => array('type' => 'INT', 'constraint' => 20, 'null' => TRUE),
+        $fields = array('social_id' => array('type' => 'BIGINT', 'constraint' => 20, 'null' => TRUE),
                         'type' => array('type' => 'ENUM', 'constraint' => array('TWITTER', 'FACEBOOK'), 'null' => FALSE),
                         'date' => array('type' => 'INT', 'constraint' => 10, 'null' => FALSE));
         $this->dbforge->add_field($fields);

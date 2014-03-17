@@ -4,7 +4,7 @@ class Migration_Add_location extends CI_Migration {
     
     public function up()
     {
-        $this->dbforge->drop_table('locations');
+        $this->dbforge->drop_table('locations', TRUE);
         
         $fields = array('id' => array('type' => 'INT', 'constraint' => 11, 'null' => FALSE, 'auto_increment' => TRUE),
                         'type' => array('type' => 'VARCHAR', 'constraint' => 50, 'null' => FALSE),
