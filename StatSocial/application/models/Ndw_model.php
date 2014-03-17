@@ -65,11 +65,13 @@ class Ndw_model extends MY_Model {
 
 			$ndw[] = $ndwRec;
 		}
+		var_dump($ndw);
 		if ($ndw) {
 			if (count($ndw) == 1) {
 				$this->insert($ndw[0]);
 			} else {
-				$this->insert($ndw);
+				$this->db->insert_batch($this->table, $ndw);
+
 			}
 		}
 	}
