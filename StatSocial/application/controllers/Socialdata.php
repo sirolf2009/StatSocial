@@ -16,7 +16,7 @@ class Socialdata extends CI_Controller {
     
     public function index()
     {
-        $this->post_model->facebook();
+        $this->post_model->facebook("");
         
         $this->load->view('layout/header', array('title' => 'Socialdata'));
         $this->load->view('layout/nav', array());

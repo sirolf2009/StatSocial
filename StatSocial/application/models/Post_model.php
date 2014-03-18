@@ -83,7 +83,7 @@ class Post_Model extends MY_Model {
                         // set the user in the global array for later..
                         $this->users['FACEBOOK'][$post->from->id] = $post->from->name; 
                               
-                        // insert the optained data...             
+                        // insert the obtained data...             
                         parent::insert($insert, TRUE);
                     }  
                 }
@@ -231,7 +231,7 @@ class Post_Model extends MY_Model {
         
         if (in_array($type, array('TWITTER', 'FACEBOOK')))
         {
-            $insert = $this->db->insert_string("social_users", array('social_id' => $id, 'type' => $type, 'date' => time()));
+            $insert = $this->db->insert_string("excludes", array('social_id' => $id, 'type' => $type, 'date' => time()));
             
             $this->db->query(str_replace("INSERT INTO", "INSERT IGNORE INTO", $insert)); 
             
