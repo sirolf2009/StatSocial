@@ -16,6 +16,17 @@ class Ndw_model extends MY_Model {
 	public function getWithLocation() {
 		$this->db->select("locations.*, ndw.*, locations.type as location_type");
 		$this->db->join("locations", "ndw.location = locations.id");
+		$this->db->order_by("ndw.date", "DESC");
+		return $this->db->get("ndw")->result_array();
+	}
+
+	public function getRoadsWithCount($type = null){
+		$this->db->select("roadnumber, count(ndw.id) as count");
+		$this->db->join("locations", "ndw.location = locations.id");
+		if($type){
+			$this->db->where("ndw.type", $type);
+		}
+		$this->db->group_by("roadnumber");
 		return $this->db->get("ndw")->result_array();
 	}
 
@@ -65,7 +76,7 @@ class Ndw_model extends MY_Model {
 
 			$ndw[] = $ndwRec;
 		}
-		var_dump($ndw);
+
 		if ($ndw) {
 			if (count($ndw) == 1) {
 				$this->insert($ndw[0]);

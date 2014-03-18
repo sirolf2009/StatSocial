@@ -1,11 +1,12 @@
 <?php defined("BASEPATH") OR exit("No direct script access allowed."); ?>
+
 <div class="container">
     <?php echo alerts(); ?>
     <?php echo alert("warning", "Deze weg data is nog niet actueel en volledig!", FALSE); ?>
 	<p>
 		<a class="btn btn-primary" href="<?=site_url('roaddata/get')?>">Haal actuele data op</a>
 	</p>
-	<div class="table-responsive">
+	<div class="table-responsive pre-scrollable">
 		<table class="table">
 		<tr>
 			<th>
@@ -58,4 +59,6 @@
 
 	</table>
 		</div>
+	<div id="container" style="width:100%; height:500px;"></div>
+
 </div>

@@ -22,7 +22,7 @@ class Roaddata extends CI_Controller {
 
 		$this->load->view('layout/header', array('title' => 'Wegendata'));
 		$this->load->view('layout/nav', array());
-		$this->load->view('pages/roaddata', array("roadData"=> $roadData));
+		$this->load->view('pages/roaddata', array("roadData" => $roadData));
 		$this->load->view('layout/footer', array());
 	}
 
@@ -33,6 +33,70 @@ class Roaddata extends CI_Controller {
 		$this->Ndw_model->getActualData();
 		redirect(site_url("roaddata"));
 	}
+
+	/**
+	 * Get data for chart
+	 */
+	public function getData() {
+		$json = array(
+			"road" => array(),
+			"count" => array()
+		);
+
+		$typesToLoad = array("accident", "other", "rubberNecking");
+		$typesAndCount = array();
+		foreach ($typesToLoad as $type) {
+			$typesAndCount[$type] = $this->transformData($this->Ndw_model->getRoadsWithCount($type));
+		}
+
+		foreach ($this->Ndw_model->getRoadsWithCount() as $road) {
+			$json["road"][] = $road["roadnumber"];
+			$json["count"][] = (int)$road["count"];
+			foreach ($typesToLoad as $type) {
+				$json = $this->mergeCounts($road, $typesAndCount[$type], $json, $type);
+			}
+		}
+
+		header('Content-type: application/json');
+		echo json_encode($json);
+	}
+
+	/**
+	 * Transform data for chart
+	 * @param $roadAndCount
+	 * @return array
+	 */
+	private function transformData($roadAndCount) {
+		$arr = array(
+			"road" => array(),
+			"count" => array()
+		);
+		foreach ($roadAndCount as $rac) {
+			$arr["road"][] = $rac["roadnumber"];
+			$arr["count"][] = $rac["count"];
+		}
+		return $arr;
+	}
+
+	/**
+	 * merge counts of other types with json array
+	 * @param $road
+	 * @param $counts
+	 * @param $json
+	 * @param $type
+	 * @return mixed
+	 */
+	private function mergeCounts($road, $counts, $json, $type) {
+		$key = array_search($road["roadnumber"], $counts["road"]);
+		if (is_integer($key)) {
+			$json[$type][] = (int)$counts["count"][$key];
+			return $json;
+		} else {
+			$json[$type][] = 0;
+			return $json;
+		}
+	}
+
 
 }
 
