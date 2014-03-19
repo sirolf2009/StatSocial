@@ -43,7 +43,7 @@ class Roaddata extends CI_Controller {
 			"count" => array()
 		);
 
-		$typesToLoad = array("accident", "other", "rubberNecking");
+		$typesToLoad = array("accident", "other", "rubberNecking", "earlierAccident");
 		$typesAndCount = array();
 		foreach ($typesToLoad as $type) {
 			$typesAndCount[$type] = $this->transformData($this->Ndw_model->getRoadsWithCount($type));

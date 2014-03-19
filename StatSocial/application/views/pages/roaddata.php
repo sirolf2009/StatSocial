@@ -59,6 +59,6 @@
 
 	</table>
 		</div>
-	<div id="container" style="width:100%; height:500px;"></div>
+	<div id="container" style="width:100%; height:700px;"></div>
 
 </div>

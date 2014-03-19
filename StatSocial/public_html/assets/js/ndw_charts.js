@@ -37,6 +37,10 @@ $(function () {
 					{
 						name: 'Kijkers File',
 						data: data.rubberNecking
+					},
+					{
+						name: 'Eerder ongeluk',
+						data: data.earlierAccident
 					}
 				]
 			});
