@@ -4,7 +4,7 @@
  * Class Roaddata
  * @property Ndw_model $Ndw_model
  */
-class Roaddata extends CI_Controller {
+class Roaddata extends MY_Controller {
 
 	public function __construct() {
 		parent::__construct();
@@ -20,10 +20,9 @@ class Roaddata extends CI_Controller {
 
 		$roadData = $this->Ndw_model->getWithLocation();
 
-		$this->load->view('layout/header', array('title' => 'Wegendata'));
-		$this->load->view('layout/nav', array());
-		$this->load->view('pages/roaddata', array("roadData" => $roadData));
-		$this->load->view('layout/footer', array());
+		$this->addJs("ndw_charts.js");
+		$this->addView('pages/roaddata', array("roadData" => $roadData));
+		$this->viewPage("RoadData");
 	}
 
 	/**

@@ -11,7 +11,7 @@ $(function () {
 					type: 'bar'
 				},
 				title: {
-					text: 'Aantal gebeurtenissen per weg'
+					text: 'Aantal gebeurtenissen per weg (top 20)'
 				},
 				xAxis: {
 					categories: data.road

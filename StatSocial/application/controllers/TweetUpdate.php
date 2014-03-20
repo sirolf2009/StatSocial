@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class TweetUpdate extends CI_Controller {
+class TweetUpdate extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -11,8 +11,6 @@ class TweetUpdate extends CI_Controller {
     }
     
     public function index() {
-        $this->load->view('layout/header', array('title' => 'TweetUpdate'));
-        $this->load->view('layout/nav', array());
 
         $this->load->library('sentiment');
         $this->load->driver('request');
@@ -20,7 +18,7 @@ class TweetUpdate extends CI_Controller {
         $this->load->model("postModel");
         $this->postModel->processAllRoads();
 
-        $this->load->view('layout/footer', array());
+		$this->viewPage("TweetUpdate");
     }
 }
 
