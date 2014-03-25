@@ -1,7 +1,6 @@
 <?php defined("BASEPATH") OR exit("No direct script access allowed."); ?>
 <div class="container">
     <?php echo alerts(); ?>
-<<<<<<< HEAD
         
     <table class="table">
         <thead>
@@ -20,7 +19,6 @@
             <?php endforeach; ?>
         </tbody>
     </table>
-=======
     <?php echo alert("warning", "Helaas kon ik je nog niet voorzien van sociale data, zullen we het later nog eens proberen?", FALSE); ?>
     <form action="/socialdata/search" role="form" method="post">
    		<div class="row">
@@ -45,26 +43,23 @@
     </form>
     <br>
 	<div class="table-responsive">
-    		<?php if(isset($searchResult)) { 
+    		<?php if(isset($searchResult)) { ?>
     			print("<input type='button' class='btn btn-info pull-left' value='vorige <'>");
     			print("<input type='button' class='btn btn-info pull-right' value='volgende >'>");
 				print("<table class='table'>");
-    			foreach($searchResult as $data):?>
+    		<?php foreach($searchResult as $data):?>
 					<tr>
 						<td>
-							<?=$data->type?>
+							<?php echo($data->type); ?>
 						</td>
 						<td>
-							<?=$data->name?>
+							<?php echo($data->name); ?>
 						</td>
 						<td>
-							<?=$data->message?>
+							<?php echo($data->message); ?>
 						</td>
 						<td>
-							<?=$data->location?>
-						</td>
-						<td>
-							<?=date('d-m-Y H:i', $data->date)?>
+							<?php echo(date('d-m-Y H:i', $data->date)); ?>
 						</td>
 					</tr>
 				<?php endforeach; 
@@ -73,5 +68,4 @@
     			print("<input type='button' class='btn btn-info pull-right' value='volgende >'>");
 			} ?>
 	</div>
->>>>>>> 9cf466cc9966727c44b1ba0f1f412d1bc2291205
 </div>
