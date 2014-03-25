@@ -3,8 +3,8 @@
 class CI_Request_facebook extends Request_driver {
 
     private $url                = 'https://graph.facebook.com/search';
-    private $app_id             = '';
-    private $app_secret         = '';
+    private $app_id             = '458284534272920';
+    private $app_secret         = '88bb0b80af25a303c7ab0b9bc50ee00e';
     
     public function get(array $terms)
     {                  

@@ -181,7 +181,7 @@ class Post_Model extends MY_Model {
                     break;
                 }
                 
-                // let's get the next results from the saerch_metadata given by Twitter and put it in the query to rebuild.
+                // let's get the next results from the search_metadata given by Twitter and put it in the query to rebuild.
                 parse_str(str_replace('?', '', $data->search_metadata->next_results), $query);
             }
             else
@@ -213,7 +213,7 @@ class Post_Model extends MY_Model {
             foreach (array('TWITTER', 'FACEBOOK') as $media)    
             {
                 // get the persons to exclude...
-                $excisting = $this->db->select('social_id')->where('type', $media)->get('social_users')->result_array();
+                $existing = $this->db->select('social_id')->where('type', $media)->get('social_users')->result_array();
                 
                 // if user data exists
                 if ( ! isset($this->users[$media]))
@@ -225,7 +225,7 @@ class Post_Model extends MY_Model {
                 foreach ($this->users[$media] as $id => $user)
                 {
                     // check if the user does not already exists, if so we remove it and skip this user..
-                    if (in_array($user, array_column($excisting, 'social_id')))
+                    if (in_array($user, array_column($existing, 'social_id')))
                     {
                         unset($this->users[$media][$id]);
                         continue;
@@ -256,5 +256,32 @@ class Post_Model extends MY_Model {
         }
         
         return FALSE;
+    }
+
+    // ------------------------------------------------------------------------
+    /*
+     * search for a post
+     * @param $platform - may be either Facebook, Twitter or Allebij
+     * @param $user - the user to search for
+     * @param $regex - the message to search for
+     * @param $page - not used
+     * @return an array with the query result
+    */
+    public function search($platform, $user, $regex, $page) {
+        //construct the query
+        $query = ("SELECT posts.* , social_users.name ".
+            "FROM posts ".
+            "LEFT JOIN social_users ON posts.social_id = social_users.social_id ".
+            "WHERE posts.message LIKE  '%".$regex."%' ".
+            //if platform is set, filter for the specified platform
+            ($platform=="Allebij" ? "" : "AND social_users.type = '".strtoupper($platform)."' ").
+            //if user is set, filter for the specified user
+            ($user=="" ? "" : "AND social_users.name = ".$user." ")
+            //"LIMIT=".($page*30).",".(30+$page*30)
+            );
+        //send the query to the database
+        $data = $this->db->query($query);
+        //return all our rows
+        return $data->result();
     }
 }
