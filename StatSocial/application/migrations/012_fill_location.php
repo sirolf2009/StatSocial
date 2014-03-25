@@ -18,6 +18,6 @@ class Migration_Fill_location extends CI_Migration {
     
     public function down()
     {
-        $this->db->truncate('location');
+        $this->db->truncate('locations');
     }
 }

@@ -39,7 +39,7 @@ class Sentiment {
         
         foreach($this->db->query($sql)->result() AS $result)
         {                                             
-            if (@preg_match("/{$result->regex}/i", $sentence))
+            if (@preg_match("/.*{$result->regex}[ \\.!\\?$].*/i", $sentence))
             {
                 if ($result->type === 'POSITIVE')
                 {
@@ -50,7 +50,7 @@ class Sentiment {
                     $negative += $result->false_negative;
                 }
             }         
-        }
+        }      
         
         if ($array)
         {

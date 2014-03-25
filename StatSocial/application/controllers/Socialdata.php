@@ -16,11 +16,11 @@ class Socialdata extends CI_Controller {
     
     public function index()
     {
-        $this->post_model->facebook("");
+        $data['posts'] = $this->post_model->get_all();
         
         $this->load->view('layout/header', array('title' => 'Socialdata'));
         $this->load->view('layout/nav', array());
-        $this->load->view('pages/socialdata', array());
+        $this->load->view('pages/socialdata', $data);
         $this->load->view('layout/footer', array());
     }
 }

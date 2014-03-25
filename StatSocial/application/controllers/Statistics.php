@@ -16,7 +16,7 @@ class Statistics extends CI_Controller {
     {
         $this->load->library('sentiment');
         
-        var_dump($this->sentiment->analyse("Echt ongelofelijk! Bus rijd voor mijn neus weg!"));
+        var_dump($this->sentiment->analyse("Bah! Alweer file bij de A15 ter hoogte van Ridderkerk, #laatophetwerk!", TRUE));
         
         $this->load->view('layout/header', array('title' => 'Statistieken'));
         $this->load->view('layout/nav', array());

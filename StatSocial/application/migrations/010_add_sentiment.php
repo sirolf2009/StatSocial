@@ -9,8 +9,8 @@ class Migration_Add_sentiment extends CI_Migration {
         $fields = array('id' => array('type' => 'INT', 'constraint' => 11, 'null' => FALSE, 'auto_increment' => TRUE),
                         'type' => array('type' => 'ENUM', 'constraint' => array('POSITIVE', 'NEGATIVE'), 'null' => FALSE),
                         'regex' => array('type' => 'VARCHAR', 'constraint' => 100, 'null' => FALSE),
-                        'false_positive' => array('type' => 'DECIMAL', '16,15', 'null' => TRUE, 'default' => 0),
-                        'false_negative' => array('type' => 'DECIMAL', '16,15', 'null' => TRUE, 'default' => 0));
+                        'false_positive' => array('type' => 'DECIMAL', '16.15', 'null' => TRUE, 'default' => 0),
+                        'false_negative' => array('type' => 'DECIMAL', '16.15', 'null' => TRUE, 'default' => 0));
         $this->dbforge->add_field($fields);
         $this->dbforge->add_key('id', TRUE);
         $this->dbforge->create_table("sentiments");    

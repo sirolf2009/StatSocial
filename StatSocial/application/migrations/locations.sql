@@ -1,5 +1,5 @@
-DELETE FROM `location`;
-INSERT INTO `location` (`id`, `type`, `roadnumber`, `roadname`, `first_name`, `second_name`) VALUES
+DELETE FROM `locations`;
+INSERT INTO `locations` (`id`, `type`, `roadnumber`, `roadname`, `first_name`, `second_name`) VALUES
 	(1, 'Versie', '17', '', '5.5.B', '15-03-2013'),
 	(10, 'Werelddeel', '', '', 'Europa', ''),
 	(11, 'Groep', '', '', 'Benelux', ''),

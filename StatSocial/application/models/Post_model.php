@@ -4,7 +4,7 @@ class Post_Model extends MY_Model {
     
     protected $table = 'posts';
     protected $primary_key = 'id';
-    protected $fields = array('id', 'post_id', 'ndw_id', 'social_id', 'type', "message", "location", "date");
+    protected $fields = array('id', 'post_id', 'ndw_id', 'social_id', 'type', "message", "date");
     
     private $users = array();
     
@@ -25,7 +25,7 @@ class Post_Model extends MY_Model {
             return;    
         }
         
-        // set the time limit to infinite..
+        // set the time limit to inifinite..
         set_time_limit(0);
         
         // select the twitter driver..
@@ -48,7 +48,7 @@ class Post_Model extends MY_Model {
         
         // while everything is going well and we are below the times amount and have less then 3 errors we can go
         while($times < 10 && $errors < 3)
-        {
+        {         
             // get the data...
             $data = $this->request->get($query); 
             
@@ -101,8 +101,11 @@ class Post_Model extends MY_Model {
             $times++;
         }
         
+        // set the time limit to 30 seconds..
+        set_time_limit(30);
+        
         // if we are done, we should kill the page!
-        exit();     
+        return;     
     }
     
     // ------------------------------------------------------------------------
@@ -115,7 +118,7 @@ class Post_Model extends MY_Model {
             return;    
         }
         
-        // set the time limit to infinite..
+        // set the time limit to inifinite..
         set_time_limit(0);
         
         // select the twitter driver..
@@ -138,9 +141,9 @@ class Post_Model extends MY_Model {
         
         // while everything is going well and we are below the times amount and have less then 3 errors we can go
         while($times < 10 && $errors < 3)
-        {
+        {            
             // get the data...
-            $data = $this->request->get($query); 
+            $data = $this->request->get($query);  
             
             // if the http_code from our request is not 200, we should try again..
             if ($this->request->http_code() === 200)
@@ -162,15 +165,20 @@ class Post_Model extends MY_Model {
                         $insert['social_id']    = $post->user->id_str;  
                         $insert['type']         = 'TWITTER';
                         $insert['message']      = $post->text;
-                        $insert['location']     = $post->user->location;
                         $insert['date']         = strtotime($post->created_at);
                               
                         // set the user in the global array for later..
-                        $this->users['TWITTER'][$post->user->id_str] = $post->user->name; 
+                        $this->users['TWITTER'][(int)$post->user->id_str] = $post->user->name; 
                               
                         // insert the optained data...             
                         parent::insert($insert, TRUE);
                     }  
+                }
+
+                // check if there are any results left.. if not we should stop!
+                if ( ! isset($data->search_metadata->next_results))
+                {
+                    break;
                 }
                 
                 // let's get the next results from the saerch_metadata given by Twitter and put it in the query to rebuild.
@@ -186,8 +194,11 @@ class Post_Model extends MY_Model {
             $times++;
         }
         
-        // if we are done, we should kill the page!
-        exit();
+        // set the time limit to 30 seconds..
+        set_time_limit(30);
+        
+        // if we are done, we should return
+        return;
     }
     
     // ------------------------------------------------------------------------
@@ -203,6 +214,12 @@ class Post_Model extends MY_Model {
             {
                 // get the persons to exclude...
                 $excisting = $this->db->select('social_id')->where('type', $media)->get('social_users')->result_array();
+                
+                // if user data exists
+                if ( ! isset($this->users[$media]))
+                {
+                    continue;
+                }
                 
                 // loop through each user.
                 foreach ($this->users[$media] as $id => $user)
