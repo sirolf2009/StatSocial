@@ -38,7 +38,10 @@ class MY_Controller extends CI_Controller {
 	 */
 	public function viewPage($title = "") {
 		$this->load->view('layout/header', array('title' => $title));
-		$this->load->view('layout/nav', array());
+        if($this->auth->is()){
+            $this->load->view('layout/nav', array());
+        }
+
 		foreach ($this->views as $view) {
 			$this->load->view($view["view"], $view["data"]);
 		}
