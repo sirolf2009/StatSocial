@@ -20,13 +20,20 @@ class Ndw_model extends MY_Model {
 		return $this->db->get("ndw")->result_array();
 	}
 
-	public function getRoadsWithCount($type = null){
+	/**
+	 * @param null $type
+	 * @param int $top
+	 * @return mixed
+	 */
+	public function getRoadsWithCount($type = null, $top = 20){
 		$this->db->select("roadnumber, count(ndw.id) as count");
 		$this->db->join("locations", "ndw.location = locations.id");
 		if($type){
 			$this->db->where("ndw.type", $type);
 		}
 		$this->db->group_by("roadnumber");
+		$this->db->order_by("count", "DESC");
+		$this->db->limit($top);
 		return $this->db->get("ndw")->result_array();
 	}
 

@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Account extends CI_Controller {
+class Account extends MY_Controller {
     
     public function index()
     {
@@ -19,10 +19,9 @@ class Account extends CI_Controller {
                 redirect('dashboard');
             }
         }
-        
-        $this->load->view('layout/header', array('title' => 'Inloggen'));
-        $this->load->view('pages/account/login', array('error' => $error));
-        $this->load->view('layout/footer', array());
+
+		$this->addView('pages/account/login', array('error' => $error));
+		$this->viewPage("Inloggen");
     }
     
     public function settings()
@@ -47,11 +46,9 @@ class Account extends CI_Controller {
                 redirect('account/settings', 'refresh');
             }
         }
-        
-        $this->load->view('layout/header', array('title' => 'Gegevens'));
-        $this->load->view('layout/nav', array());
-        $this->load->view('pages/account/settings', array('user' => $this->user_model->get($this->auth->id())));
-        $this->load->view('layout/footer', array());
+
+		$this->addView('pages/account/settings', array('user' => $this->user_model->get($this->auth->id())));
+		$this->viewPage("Gegevens");
     }
     
     public function logout()

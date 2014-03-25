@@ -11,7 +11,7 @@ $(function () {
 					type: 'bar'
 				},
 				title: {
-					text: 'Aantal gebeurtenissen per weg'
+					text: 'Aantal gebeurtenissen per weg (top 20)'
 				},
 				xAxis: {
 					categories: data.road
@@ -37,6 +37,10 @@ $(function () {
 					{
 						name: 'Kijkers File',
 						data: data.rubberNecking
+					},
+					{
+						name: 'Eerder ongeluk',
+						data: data.earlierAccident
 					}
 				]
 			});

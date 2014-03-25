@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Statistics extends CI_Controller {
-    
+class Statistics extends MY_Controller {
+
     public function __construct()
     {
         parent::__construct();
@@ -17,11 +17,9 @@ class Statistics extends CI_Controller {
         $this->load->library('sentiment');
         
         var_dump($this->sentiment->analyse("Echt ongelofelijk! Bus rijd voor mijn neus weg!"));
-        
-        $this->load->view('layout/header', array('title' => 'Statistieken'));
-        $this->load->view('layout/nav', array());
-        $this->load->view('pages/statistics', array());
-        $this->load->view('layout/footer', array());
+
+		$this->addView('pages/statistics');
+		$this->viewPage("Statistieken");
     }
 }
 

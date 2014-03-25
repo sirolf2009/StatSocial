@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Socialdata extends CI_Controller {
+class Socialdata extends MY_Controller {
     
     public function __construct()
     {
@@ -16,12 +16,19 @@ class Socialdata extends CI_Controller {
     
     public function index()
     {
+<<<<<<< HEAD
         //$this->post_model->twitter("file A6");
         
         $this->load->view('layout/header', array('title' => 'Socialdata'));
         $this->load->view('layout/nav', array());
         $this->load->view('pages/socialdata', array());
         $this->load->view('layout/footer', array());
+=======
+        $this->post_model->facebook("");
+
+		$this->addView('pages/socialdata');
+		$this->viewPage('Socialdata');
+>>>>>>> 03c864bb6cbbff6bd142e36add875b23b4e9a8ab
     }
 
     public function search() {
