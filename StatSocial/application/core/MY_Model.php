@@ -61,7 +61,7 @@ class MY_Model extends CI_Model {
     */
     public function get()
     {
-        $this->db->select($this->_fields());
+        $this->db->select($this->_fields(TRUE));
         $this->_set_where(func_get_args());
         return $this->db->get($this->_table())->row();
     }
@@ -77,7 +77,7 @@ class MY_Model extends CI_Model {
     */
     public function get_all()
     {
-        $this->db->select($this->_fields());
+        $this->db->select($this->_fields(TRUE));
         $this->_set_where(func_get_args());
         return $this->db->get($this->_table())->result();
     }
@@ -136,8 +136,7 @@ class MY_Model extends CI_Model {
         if ($valid)
         {
             $data = array_intersect_key($data, array_flip($this->_fields()));
-            $this->_set_where($primary_value);
-            $this->db->set($data)->update($this->_table());
+            $this->db->where($this->primary_key, $primary_value)->set($data)->update($this->_table());
             return $this->db->affected_rows();
         }
         
@@ -269,11 +268,23 @@ class MY_Model extends CI_Model {
     * @access private
     * @returns array $fields
     */
-    private function _fields()
+    private function _fields($prefix = FALSE)
     {
         if ($this->_table() && empty($this->fields))
         {
             $this->fields = $this->db->list_fields($this->_table());
+        }
+        
+        if ($prefix)
+        {
+            $fields = array();
+        
+            foreach ($this->fields AS $key => $val)
+            {
+                $fields[$key] = $this->_table().'.'.$val;
+            }
+            
+            return $fields;
         }
         
         return $this->fields;

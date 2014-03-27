@@ -152,6 +152,19 @@ class CI_Request extends CI_Driver_Library {
     
     // ------------------------------------------------------------------------
     
+    public function fql(array $ids)
+    {
+        if (method_exists($this->current, 'fql'))
+        {
+            return $this->current->fql($ids);
+        }
+        
+        show_error("FQL is only available for Facebook request driver.");
+        return;
+    }
+    
+    // ------------------------------------------------------------------------
+    
     public function http_code()
     {
         return $this->current->http_code();    

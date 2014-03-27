@@ -19,6 +19,16 @@ class Ndw_model extends MY_Model {
 		$this->db->order_by("ndw.date", "DESC");
 		return $this->db->get("ndw")->result_array();
 	}
+    
+    public function getRecentWithLocation()
+    {
+        $this->db->select("locations.*, ndw.*, locations.type as location_type");
+        $this->db->join("locations", "ndw.location = locations.id");
+        $this->db->order_by("ndw.date", "DESC");
+        $this->db->where("ndw.end_date >=", strtotime("-1 hour"));
+        
+        return $this->db->get("ndw")->result();
+    }
 
 	/**
 	 * @param null $type

@@ -4,10 +4,10 @@ class CI_Request_twitter extends Request_driver {
 
     private $oauth;
     private $url                = 'https://api.twitter.com/1.1/search/tweets.json';
-    private $consumer_key       = '';
-    private $cunsumer_secret    = '';
-    private $access_token       = '';
-    private $access_secret      = '';
+    private $consumer_key       = 'QRJyzxWcuFAtElzPTVL0Q';
+    private $cunsumer_secret    = 'zV8WQjYLgkZfp0ENOUlDbClQSjN079ZNqvL4WJo';
+    private $access_token       = '2382342205-8cuIOebKGuGAkzcIsE5sMtTxApp2tNvKbgTkYgc';
+    private $access_secret      = 'aJen98mhbYw3B4exAy8g1ThR7jdN34mCNeIKLQ4OCFNcO';
     
     public function get(array $terms)
     {    

@@ -14,8 +14,7 @@ class Statistics extends MY_Controller {
     
     public function index()
     {
-        $this->load->library('sentiment');
-        $this->addView('pages/statistics');
+		$this->addView('pages/statistics');
 		$this->viewPage("Statistieken");
     }
 }

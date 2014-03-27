@@ -12,24 +12,52 @@ class Socialdata extends MY_Controller {
         }
         
         $this->load->model('post_model');
+        $this->load->helper('form');
+        $this->load->helper('text');
     }
     
     public function index()
     {
+        $order_by = 'DESC';
+        $limit    = 25;
+        
+        if ($this->input->post('name'))
+        {
+            $this->post_model->like('social_users.name', $this->input->post('name', TRUE));    
+        }
+        
+        if ($this->input->post('type') && $this->input->post('type') !== 'ALL')
+        {
+            $this->post_model->where('posts.type', $this->input->post('type', TRUE));    
+        }
+        
+        if ($this->input->post('date_from'))
+        {
+            $this->post_model->where('posts.date >=', strtotime($this->input->post('date_from', TRUE)));    
+        }
+        
+        if ($this->input->post('date_to'))
+        {
+            $this->post_model->where('posts.date <=', strtotime($this->input->post('date_to', TRUE)) + 86399);   
+        }
+        
+        if ($this->input->post('date'))
+        {
+            $order_by = $this->input->post('date');  
+        }
+        
+        if ($this->input->post('amount'))
+        {
+            $limit = ($this->input->post('amount') !== 'ALL' ? $this->input->post('amount') : 99999999);    
+        }
+        
+                         $this->post_model->limit($limit);
+                         $this->post_model->order_by("posts.date", $order_by);                 
         $data['posts'] = $this->post_model->get_all();
-        //$this->post_model->twitter("file A6");
-        $this->post_model->facebook("");
 
+        $this->addJs("application.js");
 		$this->addView('pages/socialdata', $data);
-		$this->viewPage('Socialdata');
-    }
-
-    public function search() {
-        $this->load->view('layout/header', array('title' => 'Socialdata'));
-        $this->load->view('layout/nav', array());
-        $result = $this->post_model->search($this->input->post("searchPlatform"), $this->input->post("searchPerson"), $this->input->post("searchValue"), 1);
-        $this->load->view('pages/socialdata', array("searchResult" => $result));
-        $this->load->view('layout/footer', array());
+		$this->viewPage('Sociale data');
     }
 }
 
