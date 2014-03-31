@@ -264,10 +264,11 @@ class Post_Model extends MY_Model {
      * @param $platform - may be either Facebook, Twitter or Allebij
      * @param $user - the user to search for
      * @param $regex - the message to search for
-     * @param $page - not used
+     * @param $startingDate - date to search from
+     * @param $startingDate - date to search to
      * @return an array with the query result
     */
-    public function search($platform, $user, $regex, $page) {
+    public function search($platform, $user, $regex, $startingDate, $endingDate) {
         //construct the query
         $query = ("SELECT posts.* , social_users.name ".
             "FROM posts ".
@@ -276,8 +277,8 @@ class Post_Model extends MY_Model {
             //if platform is set, filter for the specified platform
             ($platform=="Allebij" ? "" : "AND social_users.type = '".strtoupper($platform)."' ").
             //if user is set, filter for the specified user
-            ($user=="" ? "" : "AND social_users.name = ".$user." ")
-            //"LIMIT=".($page*30).",".(30+$page*30)
+            ($user=="" ? "" : "AND social_users.name = ".$user." ").
+            ($startingDate != null && $endingDate != null ? "AND posts.date BETWEEN".$startingDate." AND ".$endingDate : "")
             );
         //send the query to the database
         $data = $this->db->query($query);
