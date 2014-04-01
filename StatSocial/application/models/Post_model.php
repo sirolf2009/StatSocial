@@ -339,34 +339,6 @@ class Post_Model extends MY_Model {
         
         return FALSE;
     }
-
-    // ------------------------------------------------------------------------
-    /*
-     * search for a post
-     * @param $platform - may be either Facebook, Twitter or Allebij
-     * @param $user - the user to search for
-     * @param $regex - the message to search for
-     * @param $startingDate - date to search from
-     * @param $startingDate - date to search to
-     * @return an array with the query result
-    */
-    public function search($platform, $user, $regex, $startingDate, $endingDate) {
-        //construct the query
-        $query = ("SELECT posts.* , social_users.name ".
-            "FROM posts ".
-            "LEFT JOIN social_users ON posts.social_id = social_users.social_id ".
-            "WHERE posts.message LIKE  '%".$regex."%' ".
-            //if platform is set, filter for the specified platform
-            ($platform=="Allebij" ? "" : "AND social_users.type = '".strtoupper($platform)."' ").
-            //if user is set, filter for the specified user
-            ($user=="" ? "" : "AND social_users.name = ".$user." ").
-            ($startingDate != null && $endingDate != null ? "AND posts.date BETWEEN".$startingDate." AND ".$endingDate : "")
-            );
-        //send the query to the database
-        $data = $this->db->query($query);
-        //return all our rows
-        return $data->result();
-    }
     
     // ------------------------------------------------------------------------
     
