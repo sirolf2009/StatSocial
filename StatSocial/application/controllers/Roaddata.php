@@ -23,6 +23,8 @@ class Roaddata extends MY_Controller {
 		$this->addJs("ndw_charts.js");
 		$this->addView('pages/roaddata', array("roadData" => $roadData));
 		$this->viewPage("RoadData");
+
+
 	}
 
 	/**
@@ -42,7 +44,7 @@ class Roaddata extends MY_Controller {
 			"count" => array()
 		);
 
-		$typesToLoad = array("accident", "other", "rubberNecking", "earlierAccident");
+		$typesToLoad = $this->Ndw_model->getTypes();
 		$typesAndCount = array();
 		foreach ($typesToLoad as $type) {
 			$typesAndCount[$type] = $this->transformData($this->Ndw_model->getRoadsWithCount($type));
@@ -56,6 +58,16 @@ class Roaddata extends MY_Controller {
 			}
 		}
 
+		header('Content-type: application/json');
+		echo json_encode($json);
+	}
+
+	public function getDataTypesChart(){
+		$data = $this->Ndw_model->getTypesWithCount();
+		$json = array();
+		foreach($data as $d){
+			$json[] = array("name"=>$d['type'], "y" => (int)$d['count']);
+		}
 		header('Content-type: application/json');
 		echo json_encode($json);
 	}

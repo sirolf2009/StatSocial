@@ -31,6 +31,30 @@ class Ndw_model extends MY_Model {
     }
 
 	/**
+	 * Get ndw types
+	 * @return mixed
+	 */
+	public function getTypes(){
+		$this->db->select('type');
+		$this->db->group_by('type');
+		$data = $this->db->get('ndw')->result_array();
+		$return = array();
+		foreach($data as $d){
+			$return[] = $d['type'];
+		}
+		return $return;
+	}
+
+	public function getTypesWithCount($emptyNot = false){
+		if($emptyNot){
+			$this->db->where("type <> ''");
+		}
+		$this->db->select('`type`, count(`type`) as `count`');
+		$this->db->group_by('type');
+		return $this->db->get('ndw')->result_array();
+	}
+
+	/**
 	 * @param null $type
 	 * @param int $top
 	 * @return mixed
@@ -85,6 +109,9 @@ class Ndw_model extends MY_Model {
 			$ndwRec['description'] = "";
 			if (isset($cause->causeDescription->values)) {
 				$ndwRec['description'] = (string)$cause->causeDescription->values[0]->value;
+				if($ndwRec['type'] == 'other'){
+					$ndwRec['type'] = $ndwRec['description'];
+				}
 			}
 
 			$ndwRec['date']       = strtotime((string)$situationRec->situationRecordCreationTime);

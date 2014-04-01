@@ -60,5 +60,6 @@
 	</table>
 		</div>
 	<div id="container" style="width:100%; height:700px;"></div>
+	<div id="container_pie" style="width:100%; height:700px;"></div>
 
 </div>
