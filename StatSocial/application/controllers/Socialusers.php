@@ -32,7 +32,8 @@ class Socialusers extends MY_Controller {
             $this->socialuser_model->where('excludes.date IS '. ($this->input->post('status') === 'OPEN' ? 'NULL' : 'NOT NULL'));    
         }
         
-        $data['users'] = $this->socialuser_model->get_all();
+        $data['users']      = $this->socialuser_model->get_all();
+        $data['chart_data'] = $this->socialuser_model->chart();
         
         $this->addJs("application.js");
 		$this->addView('pages/socialusers', $data);

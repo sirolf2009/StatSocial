@@ -36,6 +36,23 @@ class Socialuser_Model extends MY_Model {
     
     // ------------------------------------------------------------------------
     
+    public function chart()
+    {
+        $chart_data = array();
+        
+        $this->db->select("COUNT({$this->table}.social_id) AS amount, type");
+        $this->db->group_by("{$this->table}.type");
+        
+        foreach ($this->db->get($this->table)->result() AS $data)
+        {
+            $chart_data[] = "['{$data->type}', {$data->amount}]";
+        }
+        
+        return $chart_data;
+    }
+    
+    // ------------------------------------------------------------------------
+    
     public function block($type, $id)
     {
         if ( ! in_array($type, array('FACEBOOK', 'TWITTER')))

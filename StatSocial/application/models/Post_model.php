@@ -49,6 +49,104 @@ class Post_Model extends MY_Model {
     
     // ------------------------------------------------------------------------
     
+    public function pie()
+    {
+        $chart_data = array();
+        
+        $this->db->select("COUNT({$this->table}.social_id) AS amount, type");
+        $this->db->group_by("{$this->table}.type");
+        
+        foreach ($this->db->get($this->table)->result() AS $data)
+        {
+            $chart_data[] = "['{$data->type}', {$data->amount}]";
+        }
+        
+        return $chart_data;
+    }
+    
+    // ------------------------------------------------------------------------
+    
+    public function spline($start, $end, $steps = 86400)
+    {
+        $while = $start;
+        $data  = array();
+        
+        while ($while <= $end)
+        {
+            $data['TWITTER']["Date.UTC(".date('Y, m, d', $while).")"] = 0;
+            $data['FACEBOOK']["Date.UTC(".date('Y, m, d', $while).")"] = 0;
+            $while += $steps;
+        }
+        
+        $this->db->select("COUNT({$this->table}.social_id) AS amount, type, date");
+        $this->db->group_by("{$this->table}.type");
+        $this->db->group_by("DATE_FORMAT(FROM_UNIXTIME({$this->table}.date), '%d-%m-%Y')");
+        
+        foreach ($this->db->get($this->table)->result() AS $post)
+        {
+            $data[$post->type]["Date.UTC(".date('Y, m, d', $post->date).")"] = $post->amount;
+        }
+        
+        return $data;
+    }
+    
+    // ------------------------------------------------------------------------
+    
+    public function donut($type)
+    {
+        $this->db->select("negative, positive");
+        $this->db->where("{$this->table}.type", strtoupper($type));
+        
+        $data = array('Negatief' => 0, 'Positief' => 0);
+        
+        foreach ($this->db->get($this->table)->result() AS $post)
+        {
+            if ($post->negative >= $post->positive)
+            {
+                $data['Negatief']++;    
+            }   
+            else
+            {
+                $data['Positief']++;
+            } 
+        }
+        
+        return $data;
+    }
+    
+    // ------------------------------------------------------------------------
+    
+    public function sentiment($start, $end, $steps = 86400)
+    {
+        $while = $start;
+        $data  = array();
+        
+        while ($while <= $end)
+        {
+            $data['Negatief']["Date.UTC(".date('Y, m, d', $while).")"] = 0;
+            $data['Positief']["Date.UTC(".date('Y, m, d', $while).")"] = 0;
+            $while += $steps;
+        }
+        
+        $this->db->select("negative, positive, date");
+        
+        foreach ($this->db->get($this->table)->result() AS $post)
+        {
+            if ($post->negative >= $post->positive)
+            {
+                $data['Negatief']["Date.UTC(".date('Y, m, d', $post->date).")"]++;    
+            }   
+            else
+            {
+                $data['Positief']["Date.UTC(".date('Y, m, d', $post->date).")"]++;
+            }
+        }
+        
+        return $data;
+    }
+    
+    // ------------------------------------------------------------------------
+    
     public function facebook($term, $ndw_id = -1)
     {
         // if the term is empty, stop doing anything!
