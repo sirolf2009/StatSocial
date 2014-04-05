@@ -103,20 +103,20 @@
                         <div id="pie"></div>
                     </div>
                     <div class="tab-pane" id="charts-tab-2">
-                        <div id="posts"></div>
+                        <div id="posts" style="width: 55%; height: 500px;"></div>
                     </div>
                     <div class="tab-pane" id="charts-tab-3">
                         <div class="row">
                             <div class="col-sm-6">
-                                <div id="twitter_donut"></div>
+                                <div id="twitter_donut" style="width: 25%; height: 500px;"></div>
                             </div>
                             <div class="col-sm-6">
-                                <div id="facebook_donut"></div>
+                                <div id="facebook_donut"  style="width: 25%; height: 500px;"></div>
                             </div>
                         </div>
                     </div>
                     <div class="tab-pane" id="charts-tab-4">
-                        <div id="sentiment"></div>
+                        <div id="sentiment" style="width: 55%; height: 500px;"></div>
                     </div>
                 </div>
             </div>

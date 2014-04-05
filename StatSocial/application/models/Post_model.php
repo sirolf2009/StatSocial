@@ -72,7 +72,7 @@ class Post_Model extends MY_Model {
     
     public function spline($start, $end, $steps = 86400)
     {
-        $while = $start;
+        $while = strtotime(date('d-m-Y', $start));
         $data  = array();
         
         while ($while <= $end + $steps)
@@ -122,7 +122,7 @@ class Post_Model extends MY_Model {
     
     public function sentiment($start, $end, $steps = 86400)
     {
-        $while = $start;
+        $while = strtotime(date('d-m-Y', $start));
         $data  = array();
         
         while ($while <= $end + $steps)

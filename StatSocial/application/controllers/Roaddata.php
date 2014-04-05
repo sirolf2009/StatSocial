@@ -133,6 +133,22 @@ class Roaddata extends MY_Controller {
         header('Content-type: application/json');
         echo json_encode($json);    
     }
+    
+    public function getSentimentData(){
+        $data = $this->Ndw_model->getRoadsWithSentiment();
+        $json = array('roads' => array());
+        
+        foreach ($data as $d)
+        {
+            $json['roads'][] = $d['roadnumber'];
+            $json['positive'][] = round($d['positive'], 0);
+            $json['negative'][] = round($d['negative'], 0);
+            $json['average'][] = round($d['average'], 0);
+        }
+        
+        header('Content-type: application/json');
+        echo json_encode($json);     
+    }
 
 	/**
 	 * Transform data for chart

@@ -112,6 +112,17 @@ class Ndw_model extends MY_Model {
         $this->db->limit(20);
         return $this->db->get()->result_array();
     }
+    
+    public function getRoadsWithSentiment()
+    {
+        $this->db->select("locations.roadnumber, SUM(posts.positive) AS positive, SUM(posts.negative) AS negative, (SUM(posts.positive + posts.negative)/2) AS average");
+        $this->db->from('posts');
+        $this->db->join('ndw', 'posts.ndw_id = ndw.id');
+        $this->db->join('locations', 'locations.id = ndw.location');
+        $this->db->group_by('locations.roadnumber');
+        $this->db->limit(20);
+        return $this->db->get()->result_array();
+    }
 
 	public function getActualData() {
 		$this->load->driver('request');

@@ -153,3 +153,45 @@ $(function () {
             });
         });
 });
+
+$(function () {
+    $.ajax({
+        type: "POST",
+        url: "/roaddata/getSentimentData"
+    })
+        .done(function (data) { 
+            $('#sentiment_container').highcharts({
+                chart: { 
+                },
+                title: {
+                    text: 'Sentiment analyse per weg (top 20)'
+                },
+                xAxis: {
+                    categories: data.roads
+                },
+                yAxis: {
+                    labels: {
+                        enabled: false
+                    },
+                    title: {
+                        text: null
+                    }
+                },
+                series: [{
+                        type: 'column',
+                        name: 'Negatief',
+                        data: data.negative
+                    },
+                    {
+                        type: 'column',
+                        name: 'Positief',
+                        data: data.positive
+                    },
+                    {
+                        type: 'spline',
+                        name: 'Gemiddelde',
+                        data: data.average
+                    }]
+            });
+        });
+});

@@ -23,6 +23,7 @@
 						<li><a href="#cause" data-toggle="tab">File oorzaken</a></li>
                         <li><a href="#posts" data-toggle="tab">Berichten per weg</a></li>
                         <li><a href="#medium" data-toggle="tab">Medium per weg</a></li>
+                        <li><a href="#sentiment" data-toggle="tab">Sentiment per weg</a></li>
 					</ul>
 					<br><br>
 				</div>
@@ -38,6 +39,9 @@
                     </div>
                     <div class="tab-pane" id="medium">
                         <div id="medium_container" style="width:55%; height:500px;"></div>
+                    </div>
+                    <div class="tab-pane" id="sentiment">
+                        <div id="sentiment_container" style="width:55%; height:500px;"></div>
                     </div>
 				</div>
 			</div>
