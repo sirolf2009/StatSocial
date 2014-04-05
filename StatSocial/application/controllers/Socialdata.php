@@ -60,7 +60,7 @@ class Socialdata extends MY_Controller {
         $data['twitter_donut']  = $this->post_model->donut('TWITTER');
         $data['facebook_donut'] = $this->post_model->donut('FACEBOOK');
         $data['sentiment']      = $this->post_model->sentiment(strtotime('-2 month'), time());
-        $data['logger']         = $this->logger->last('FACEBOOK');
+        $data['logger']         = $this->logger->last(array('FACEBOOK', 'TWITTER'));
         
 		$this->addView('pages/socialdata', $data);
 		$this->viewPage('Sociale data');

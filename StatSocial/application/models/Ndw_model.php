@@ -96,6 +96,22 @@ class Ndw_model extends MY_Model {
 		$this->db->from('ndw');
 		return $this->db->count_all_results() == '0' ? false : true ;
 	}
+    
+    public function getRoadsWithPostCount($medium = FALSE)
+    {
+        $this->db->select("locations.roadnumber, COUNT(posts.id) AS count, posts.type");
+        $this->db->from('posts');
+        $this->db->join('ndw', 'posts.ndw_id = ndw.id');
+        $this->db->join('locations', 'locations.id = ndw.location');
+        if ($medium)
+        {
+            $this->db->group_by('posts.type');
+        }
+        $this->db->group_by('locations.roadnumber');
+        $this->db->order_by('count', 'DESC');
+        $this->db->limit(20);
+        return $this->db->get()->result_array();
+    }
 
 	public function getActualData() {
 		$this->load->driver('request');

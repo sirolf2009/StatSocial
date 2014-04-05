@@ -100,6 +100,39 @@ class Roaddata extends MY_Controller {
 		header('Content-type: application/json');
 		echo json_encode($json);
 	}
+    
+    public function getPostData($medium = FALSE){
+        $data = $this->Ndw_model->getRoadsWithPostCount($medium);
+        $json = array('roads' => array());
+
+        foreach ($data as $d) {
+            if ($medium) {
+                $json[$d['roadnumber']][strtolower($d['type'])] = (int)$d['count'];
+                
+                if (! in_array($d['roadnumber'], $json['roads'])) {
+                    $json['roads'][] = $d['roadnumber'];
+                }
+            }
+            else {
+                $json['count'][] = (int)$d['count'];
+                $json['roads'][] = $d['roadnumber'];    
+            }
+        }
+        
+        if ($medium)
+        {
+            foreach ($json['roads'] as $road)
+            {
+                $json['twitter'][] = isset($json[$road]['twitter']) ? $json[$road]['twitter'] : 0;
+                $json['facebook'][] = isset($json[$road]['facebook']) ? $json[$road]['facebook'] : 0;
+                
+                unset($json[$road]);
+            }
+        }
+
+        header('Content-type: application/json');
+        echo json_encode($json);    
+    }
 
 	/**
 	 * Transform data for chart

@@ -33,6 +33,11 @@ class Logger {
             return FALSE;
         }
         
+        if (is_array($request))
+        {
+            $request = serialize($request);
+        }
+        
         $data['request'] = $request;
         $data['type']    = $type;
         $data['date']    = time();
@@ -63,13 +68,32 @@ class Logger {
     
     public function last($type)
     {
-        $type = strtoupper($type);
-        
-        if ( ! in_array($type, $this->types))
+        if (is_array($type))
         {
-            return FALSE;
-        }        
+            foreach ($type AS $t)
+            {
+                $t = strtoupper($t);
+                
+                if ( ! in_array($t, $this->types))
+                {
+                    continue;
+                }
+                
+                $this->db->or_where('type', $t);
+            }    
+        }
+        else
+        {
+            $type = strtoupper($type);
+            
+            if ( ! in_array($type, $this->types))
+            {
+                return FALSE;
+            }   
+            
+            $this->db->where('type', $type);
+        }     
 
-        return $this->db->where('type', $type)->order_by('date', 'DESC')->get($this->table)->row();    
+        return $this->db->order_by('date', 'DESC')->get($this->table)->row();    
     }
 }

@@ -19,6 +19,8 @@ class Post_Model extends MY_Model {
     
     public function get()
     {
+        $this->db->reconnect();
+        
         $args = func_get_args();
         $this->db->select("excludes.date AS exclude_date, social_users.name");
         $this->db->join("social_users", "social_users.social_id = posts.social_id AND social_users.type = posts.type");
@@ -35,6 +37,8 @@ class Post_Model extends MY_Model {
     
     public function get_all()
     {
+        $this->db->reconnect();
+        
         $args = func_get_args();
         $this->db->select("excludes.date AS exclude_date, social_users.name");
         $this->db->join("social_users", "social_users.social_id = posts.social_id AND social_users.type = posts.type");
@@ -71,7 +75,7 @@ class Post_Model extends MY_Model {
         $while = $start;
         $data  = array();
         
-        while ($while <= $end)
+        while ($while <= $end + $steps)
         {
             $data['TWITTER']["Date.UTC(".date('Y, m, d', $while).")"] = 0;
             $data['FACEBOOK']["Date.UTC(".date('Y, m, d', $while).")"] = 0;
@@ -121,7 +125,7 @@ class Post_Model extends MY_Model {
         $while = $start;
         $data  = array();
         
-        while ($while <= $end)
+        while ($while <= $end + $steps)
         {
             $data['Negatief']["Date.UTC(".date('Y, m, d', $while).")"] = 0;
             $data['Positief']["Date.UTC(".date('Y, m, d', $while).")"] = 0;
@@ -236,6 +240,8 @@ class Post_Model extends MY_Model {
                             // set the user in the global array for later..
                             $this->users['FACEBOOK'][$post->from->id] = $post->from->name; 
                             
+                            $this->db->reconnect();
+                            
                             // insert the obtained data...             
                             parent::insert($insert, TRUE);
                         }
@@ -346,6 +352,8 @@ class Post_Model extends MY_Model {
                         // set the user in the global array for later..
                         $this->users['TWITTER'][(int)$post->user->id_str] = $post->user->name; 
                               
+                        $this->db->reconnect();
+                              
                         // insert the optained data...             
                         parent::insert($insert, TRUE);
                     }  
@@ -386,6 +394,8 @@ class Post_Model extends MY_Model {
     {
         if ( ! empty($this->users))
         {
+            $this->db->reconnect();
+            
             $insert = array();
             
             // loop through the social media..
@@ -430,6 +440,8 @@ class Post_Model extends MY_Model {
     
     public function exclude($id, $type)
     {
+        $this->db->reconnect();
+        
         $type = strtoupper($type);
         
         if (in_array($type, array('TWITTER', 'FACEBOOK')))
@@ -442,6 +454,30 @@ class Post_Model extends MY_Model {
         }
         
         return FALSE;
+    }
+    
+    // ------------------------------------------------------------------------
+    
+    public function cleanup()
+    {
+        $this->db->reconnect();
+        
+        $this->db->select("id, post_id, type, COUNT(post_id) AS count");
+        $this->db->group_by('post_id');
+        $this->db->group_by('type');
+        $this->db->having('count > 1');
+        
+        $where_in = array();
+        
+        foreach ($this->db->get('posts')->result() AS $result)
+        {
+            $where_in[] = $result->id;
+        }
+        
+        if (count($where_in) > 0)
+        {
+            $this->db->where_in('id', $where_in)->delete('posts');    
+        }
     }
     
     // ------------------------------------------------------------------------

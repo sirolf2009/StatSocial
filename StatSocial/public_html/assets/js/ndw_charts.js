@@ -91,3 +91,65 @@ $(function () {
 			});
 		});
 });
+
+$(function () {
+    $.ajax({
+        type: "POST",
+        url: "/roaddata/getPostData"
+    })
+        .done(function (data) {
+            $('#posts_container').highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Aantal berichten per weg (top 20)'
+                },
+                xAxis: {
+                    categories: data.roads
+                },
+                yAxis: {
+                    title: {
+                        text: 'Aantal'
+                    }
+                },
+                series: [{
+                        name: 'Totaal',
+                        data: data.count
+                    }]
+            });
+        });
+});
+
+$(function () {
+    $.ajax({
+        type: "POST",
+        url: "/roaddata/getPostData/medium"
+    })
+        .done(function (data) {
+            $('#medium_container').highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Aantal berichten per weg (top 20)'
+                },
+                xAxis: {
+                    categories: data.roads
+                },
+                yAxis: {
+                    title: {
+                        text: 'Aantal'
+                    }
+                },
+                series: [{
+                        name: 'Twitter',
+                        data: data.twitter
+                    },
+                    {
+                        name: 'Facebook',
+                        data: data.facebook
+                    }]
+            });
+        });
+});

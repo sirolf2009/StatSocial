@@ -3,8 +3,8 @@
 <?php if ( ! $this->input->is_ajax_request()): ?>
 <div class="container">
     <ul class="nav nav-tabs">
-        <li class="pull-right"><a href="#table" data-toggle="tab">Gegevens</a></li>
-        <li class="active pull-right"><a href="#charts" data-toggle="tab">Statistieken</a></li>
+        <li class="pull-right"><a href="#table" data-toggle="tab"><b class="glyphicon glyphicon-list-alt"></b> Gegevens</a></li>
+        <li class="active pull-right"><a href="#charts" data-toggle="tab"><b class="glyphicon glyphicon-stats"></b> Statistieken</a></li>
         <?php if ( ! empty($logger)): ?>
         <li><i class="glyphicon glyphicon-flag"></i> Laatste gegevens opgehaald op: <?php echo date('d-m-Y \o\m H:i', $logger->date); ?></li>
         <?php endif; ?>

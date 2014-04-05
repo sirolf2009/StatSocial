@@ -6,8 +6,8 @@
 	<?php echo alerts(); ?>
 
 	<ul class="nav nav-tabs">
-		<li class="pull-right"><a href="#data" data-toggle="tab">Gegevens</a></li>
-        <li class="pull-right active"><a href="#stat" data-toggle="tab">Statestieken</a></li>
+		<li class="pull-right"><a href="#data" data-toggle="tab"><b class="glyphicon glyphicon-list-alt"></b> Gegevens</a></li>
+        <li class="pull-right active"><a href="#stat" data-toggle="tab"><b class="glyphicon glyphicon-stats"></b> Statestieken</a></li>
         <?php if ( ! empty($logger)): ?>
         <li><i class="glyphicon glyphicon-flag"></i> Laatste gegevens opgehaald op: <?php echo date('d-m-Y \o\m H:i', $logger->date); ?></li>
         <?php endif; ?>
@@ -21,6 +21,8 @@
 					<ul class="nav nav-pills nav-stacked">
 						<li class="active"><a href="#files" data-toggle="tab">Files per weg</a></li>
 						<li><a href="#cause" data-toggle="tab">File oorzaken</a></li>
+                        <li><a href="#posts" data-toggle="tab">Berichten per weg</a></li>
+                        <li><a href="#medium" data-toggle="tab">Medium per weg</a></li>
 					</ul>
 					<br><br>
 				</div>
@@ -31,6 +33,12 @@
 					<div class="tab-pane" id="cause">
 						<div id="container_pie" style="width:55%; height:500px;"></div>
 					</div>
+                    <div class="tab-pane" id="posts">
+                        <div id="posts_container" style="width:55%; height:500px;"></div>
+                    </div>
+                    <div class="tab-pane" id="medium">
+                        <div id="medium_container" style="width:55%; height:500px;"></div>
+                    </div>
 				</div>
 			</div>
 		</div>

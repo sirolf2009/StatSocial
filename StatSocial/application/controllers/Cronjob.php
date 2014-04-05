@@ -45,8 +45,13 @@ class Cronjob extends CI_Controller {
         {
             $values = $this->sentiment->analyse($post->message, TRUE);
 
+            
+            $this->post_model->reconnect();
             $this->post_model->update($post->id, $values, TRUE);
         } 
+        
+        // cleanup duplicates
+        $this->post_model->cleanup();
         
         // set the time limit to 30 seconds..
         set_time_limit(30); 
