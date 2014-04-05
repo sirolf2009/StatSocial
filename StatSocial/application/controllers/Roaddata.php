@@ -14,17 +14,45 @@ class Roaddata extends MY_Controller {
 		}
 
 		$this->load->model('Ndw_model');
+        $this->load->helper('form');
 	}
 
 	public function index() {
 
-		$roadData = $this->Ndw_model->getWithLocation();
+        $order_by = 'DESC';
+        $limit    = 25;
+        
+        if ($this->input->post('type') && $this->input->post('type') !== 'ALL')
+        {
+            $this->Ndw_model->where('ndw.type', str_replace('unknown', '', $this->input->post('type', TRUE)));    
+        }
+        
+        if ($this->input->post('date_from'))
+        {
+            $this->Ndw_model->where('ndw.date >=', strtotime($this->input->post('date_from', TRUE)));    
+        }
+        
+        if ($this->input->post('date_to'))
+        {
+            $this->Ndw_model->where('ndw.date <=', strtotime($this->input->post('date_to', TRUE)) + 86399);   
+        }
+        
+        if ($this->input->post('date'))
+        {
+            $order_by = $this->input->post('date');  
+        }
+        
+        if ($this->input->post('amount'))
+        {
+            $limit = ($this->input->post('amount') !== 'ALL' ? $this->input->post('amount') : 99999999);    
+        }
+        
+		$roadData = $this->Ndw_model->getWithLocation($order_by, $limit);
+        $roads    = $this->Ndw_model->getAvailableRoads();
 
 		$this->addJs("ndw_charts.js");
-		$this->addView('pages/roaddata', array("roadData" => $roadData));
+		$this->addView('pages/roaddata', array("roadData" => $roadData, 'roads' => $roads));
 		$this->viewPage("RoadData");
-
-
 	}
 
 	/**

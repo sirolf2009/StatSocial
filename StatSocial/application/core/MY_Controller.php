@@ -37,6 +37,16 @@ class MY_Controller extends CI_Controller {
 	 * @param string $title title van de pagina
 	 */
 	public function viewPage($title = "") {
+        
+        if ($this->input->is_ajax_request())
+        {
+            foreach ($this->views as $view) {
+                $this->load->view($view["view"], $view["data"]);
+            }
+            
+            return;
+        }
+        
 		$this->load->view('layout/header', array('title' => $title));
         if($this->auth->is()){
             $this->load->view('layout/nav', array());

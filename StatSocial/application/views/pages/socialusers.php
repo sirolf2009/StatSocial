@@ -1,17 +1,19 @@
 <?php defined("BASEPATH") OR exit("No direct script access allowed."); ?>
+
+<?php if ( ! $this->input->is_ajax_request()): ?>
 <div class="container">
     <ul class="nav nav-tabs">
         <li class="pull-right"><a href="#table" data-toggle="tab">Gegevens</a></li>
         <li class="active pull-right"><a href="#charts" data-toggle="tab">Statistieken</a></li>
     </ul><br>
     <div class="tab-content">
-        <div class="tab-pane" id="table">
+        <div class="tab-pane" id="table" data-type="ajax-form">
             <div class="row">
                 <div class="col-md-3">
                     <div class="panel panel-default">
                         <div class="panel-heading">Gebruikers filteren</div> 
                         <div class="panel-body">
-                            <form method="POST" role="form">
+                            <form method="POST" role="form" data-type="ajax-form" action="<?php echo current_url(); ?>">
                                 <div class="form-group">
                                     <input type="text" class="form-control" placeholder="Naam" name="name" value="<?php echo set_value('name');?>">
                                 </div>
@@ -38,7 +40,7 @@
                 <div class="col-md-9">
                     <?php echo alerts(); ?>
                     
-                    <table class="table" role="table">
+                    <table class="table" role="table" id="ajax-table">
                         <thead>
                             <tr>
                                 <th width="75%">Naam</th>
@@ -48,6 +50,8 @@
                             </tr>
                         </thead>
                         <tbody>
+<?php endif; ?>
+                        
                             <?php foreach ($users AS $user): ?>
                             <tr>
                                 <td><?php echo $user->name; ?></td>
@@ -56,6 +60,8 @@
                                 <td class="text-center"><a href="<?php echo base_url('socialusers/'.(is_null($user->date) ? 'block' : 'unblock').'/'.$user->type.'/'.$user->social_id); ?>" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-refresh" data-toggle="tooltip" title="Persoon <?php echo (is_null($user->date) ? 'blokkeren' : 'deblokkeren'); ?>."></i></a></td>
                             </tr>
                             <?php endforeach; ?>
+                            
+<?php if ( ! $this->input->is_ajax_request()): ?>
                         </tbody>
                     </table>   
                 </div> 
@@ -108,4 +114,4 @@
         </div>
     </div>
 </div>
-
+<?php endif; ?>

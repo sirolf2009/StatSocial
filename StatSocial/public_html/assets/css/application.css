@@ -43,3 +43,18 @@ textarea {
 .popover {
     max-width: 600px;
 }
+
+.icon-refresh-animate {
+    -webkit-animation: rotation 1s infinite linear;
+    animation: rotation 1s infinite linear;
+}
+ 
+@-webkit-keyframes rotation {
+    from {-webkit-transform: rotate(0deg);}
+    to   {-webkit-transform: rotate(360deg);}
+}
+
+@keyframes rotation {
+    from {transform: rotate( 0deg );}
+    to   {transform: rotate( 360deg );}
+}

@@ -1,4 +1,6 @@
 <?php defined("BASEPATH") OR exit("No direct script access allowed."); ?>
+
+<?php if ( ! $this->input->is_ajax_request()): ?>
 <div class="container">
     <ul class="nav nav-tabs">
         <li class="pull-right"><a href="#table" data-toggle="tab">Gegevens</a></li>
@@ -11,7 +13,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">Berichten filteren</div> 
                         <div class="panel-body">
-                            <form method="POST" role="form">
+                            <form method="POST" role="form" data-type="ajax-form" action="<?php echo current_url(); ?>">
                                 <div class="form-group">
                                     <input type="text" class="form-control" placeholder="Naam plaatser" name="name" value="<?php echo set_value('poster');?>">
                                 </div>
@@ -53,24 +55,30 @@
                 <div class="col-md-9">
                     <?php echo alerts(); ?>
                         
-                    <table class="table">
+                    <table class="table" id="ajax-table">
                         <thead>
                             <tr>
-                                <th width="60%">Bericht</th>
+                                <th width="50%">Bericht</th>
                                 <th width="10%">Medium</th>
-                                <th width="15%">Poster</th>
-                                <th width="15%">Datum</th>
+                                <th width="19%">Poster</th>
+                                <th width="2%"></th>
+                                <th width="19%">Datum</th>
                             </tr>
                         </thead>
                         <tbody>
+<?php endif; ?>
+
                             <?php foreach ($posts AS $post): ?>
                             <tr>
                                 <td><?php echo word_limiter($post->message, 25, '&#8230; <a href="#more" data-toggle="popover" data-title="Volledig bericht" data-content="'.str_replace('"', "&#34;", $post->message).'">Alles lezen</a>'); ?></td>
                                 <td><?php echo $post->type; ?></td>
                                 <td><?php echo $post->name; ?></td>
+                                <td><i data-toggle="tooltip" class="glyphicon glyphicon-thumbs-<?php echo ($post->negative > $post->positive ? 'down text-danger" title="Negatief bericht"' : 'up text-success" title="Positief bericht"'); ?>></i></td>
                                 <td><?php echo date("d-m-Y \o\m H:i", $post->date); ?></td>
                             </tr>
                             <?php endforeach; ?>
+                            
+<?php if ( ! $this->input->is_ajax_request()): ?>
                         </tbody>
                     </table>
                 </div>
@@ -289,7 +297,7 @@
                                 ]
                             }]
                         });
-                        
+
                         $('#sentiment').highcharts({
                             chart: {
                                 type: 'spline'
@@ -350,3 +358,4 @@
         </div>
     </div>
 </div>
+<?php endif; ?>

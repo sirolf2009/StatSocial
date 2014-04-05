@@ -4,6 +4,8 @@ class Ndw_model extends MY_Model {
 	protected $table = 'ndw';
 	protected $primary_key = 'id';
 	protected $fields = array('id', 'situation_id', 'location', 'latitude', 'longitude', 'type', 'description', 'start_date', 'end_date', 'date');
+    
+    private $result = NULL;
 
 	/**
 	 * Insert a batch of ndw records into the db
@@ -13,12 +15,30 @@ class Ndw_model extends MY_Model {
 		$this->db->insert_batch($this->table, $data);
 	}
 
-	public function getWithLocation() {
+	public function getWithLocation($order = 'DESC', $limit = NULL) {
 		$this->db->select("locations.*, ndw.*, locations.type as location_type");
 		$this->db->join("locations", "ndw.location = locations.id");
-		$this->db->order_by("ndw.date", "DESC");
-		return $this->db->get("ndw")->result_array();
+		$this->db->order_by("ndw.date", $order);
+        $this->db->limit($limit);
+		return $this->result = $this->db->get("ndw")->result_array();
 	}
+    
+    public function getAvailableRoads()
+    {
+        $roads = array();
+        
+        if ( ! empty($this->result))
+        {
+            foreach ($this->result AS $data)
+            {
+                $roads[$data['roadnumber']] = $data['roadnumber'];
+            }
+        }
+        
+        natsort($roads);
+        
+        return $roads;
+    }
     
     public function getRecentWithLocation()
     {

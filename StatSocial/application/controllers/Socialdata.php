@@ -56,12 +56,11 @@ class Socialdata extends MY_Controller {
         $data['posts'] = $this->post_model->get_all();
         
         $data['pie_data']       = $this->post_model->pie();
-        $data['spline_data']    = $this->post_model->spline(strtotime('-1 month'), time());
+        $data['spline_data']    = $this->post_model->spline(strtotime('-2 month'), time());
         $data['twitter_donut']  = $this->post_model->donut('TWITTER');
         $data['facebook_donut'] = $this->post_model->donut('FACEBOOK');
-        $data['sentiment']      = $this->post_model->sentiment(strtotime('-1 month'), time());
+        $data['sentiment']      = $this->post_model->sentiment(strtotime('-2 month'), time());
 
-        $this->addJs("application.js");
 		$this->addView('pages/socialdata', $data);
 		$this->viewPage('Sociale data');
     }
