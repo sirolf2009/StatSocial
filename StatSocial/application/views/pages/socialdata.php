@@ -5,6 +5,9 @@
     <ul class="nav nav-tabs">
         <li class="pull-right"><a href="#table" data-toggle="tab">Gegevens</a></li>
         <li class="active pull-right"><a href="#charts" data-toggle="tab">Statistieken</a></li>
+        <?php if ( ! empty($logger)): ?>
+        <li><i class="glyphicon glyphicon-flag"></i> Laatste gegevens opgehaald op: <?php echo date('d-m-Y \o\m H:i', $logger->date); ?></li>
+        <?php endif; ?>
     </ul><br>
     <div class="tab-content">
         <div class="tab-pane" id="table">

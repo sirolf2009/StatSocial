@@ -101,6 +101,10 @@ class Ndw_model extends MY_Model {
 		$this->load->driver('request');
 		$this->request->select_driver('ndw');
 		$result = $this->request->get();
+        
+        // log request 
+        $this->logger->add('NDW', 'default request URL');
+        
 		$ndw    = array();
 		foreach ($result->situation as $situation) {
 

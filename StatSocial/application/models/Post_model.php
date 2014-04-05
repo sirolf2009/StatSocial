@@ -183,7 +183,10 @@ class Post_Model extends MY_Model {
             $user_ids = array();
             
             // get the data...
-            $data = $this->request->get($query); 
+            $data = $this->request->get($query);
+            
+            // log request 
+            $this->logger->add('FACEBOOK', $query);
             
             // if the http_code from our request is not 200, we should try again..
             if ($this->request->http_code() === 200)
@@ -297,7 +300,10 @@ class Post_Model extends MY_Model {
         while($times < 5 && $errors < 3)
         {            
             // get the data...
-            $data = $this->request->get($query);  
+            $data = $this->request->get($query); 
+            
+            // log request 
+            $this->logger->add('TWITTER', $query); 
             
             // if the http_code from our request is not 200, we should try again..
             if ($this->request->http_code() === 200)

@@ -34,6 +34,7 @@ class Socialusers extends MY_Controller {
         
         $data['users']      = $this->socialuser_model->get_all();
         $data['chart_data'] = $this->socialuser_model->chart();
+        $data['logger']     = $this->logger->last('FACEBOOK');
         
         $this->addJs("application.js");
 		$this->addView('pages/socialusers', $data);

@@ -47,11 +47,12 @@ class Roaddata extends MY_Controller {
             $limit = ($this->input->post('amount') !== 'ALL' ? $this->input->post('amount') : 99999999);    
         }
         
-		$roadData = $this->Ndw_model->getWithLocation($order_by, $limit);
-        $roads    = $this->Ndw_model->getAvailableRoads();
+		$data['roadData'] = $this->Ndw_model->getWithLocation($order_by, $limit);
+        $data['roads']    = $this->Ndw_model->getAvailableRoads();
+        $data['logger']   = $this->logger->last('NDW');
 
 		$this->addJs("ndw_charts.js");
-		$this->addView('pages/roaddata', array("roadData" => $roadData, 'roads' => $roads));
+		$this->addView('pages/roaddata', $data);
 		$this->viewPage("RoadData");
 	}
 
