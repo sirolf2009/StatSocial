@@ -10,11 +10,16 @@ class Statistics extends MY_Controller {
         {
             redirect('/');
         }
+        
+        $this->load->model('statistic_model');
     }
     
     public function index()
     {
-		$this->addView('pages/statistics');
+        $data['statistics'] = $this->statistic_model->get_table();
+        $data['logger']     = $this->logger->last('NDW');
+        
+		$this->addView('pages/statistics', $data);
 		$this->viewPage("Statistieken");
     }
 }

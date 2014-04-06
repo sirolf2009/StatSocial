@@ -48,7 +48,7 @@ class Roaddata extends MY_Controller {
         }
         
 		$data['roadData'] = $this->Ndw_model->getWithLocation($order_by, $limit);
-        $data['roads']    = $this->Ndw_model->getAvailableRoads();
+        $data['roads']    = array('A1', 'A2', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'A12', 'A13', 'A15', 'A16', 'A17', 'A18', 'A20', 'A22', 'A27', 'A28', 'A30', 'A31', 'A32', 'A35', 'A37', 'A38', 'A44', 'A50', 'A58', 'A59', 'A65', 'A67', 'A73', 'A74', 'A76', 'A77', 'A79', 'A200', 'N3', 'N7', 'N9', 'N11', 'N14', 'N18', 'N31', 'N32', 'N33', 'N34', 'N35', 'N36', 'N37', 'N44', 'N48', 'N50', 'N57', 'N58', 'N59', 'N61', 'N65', 'N69', 'N99', 'N200', 'N259', 'N271', 'N273');
         $data['logger']   = $this->logger->last('NDW');
 
 		$this->addJs("ndw_charts.js");

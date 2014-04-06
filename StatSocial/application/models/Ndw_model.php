@@ -23,23 +23,6 @@ class Ndw_model extends MY_Model {
 		return $this->result = $this->db->get("ndw")->result_array();
 	}
     
-    public function getAvailableRoads()
-    {
-        $roads = array();
-        
-        if ( ! empty($this->result))
-        {
-            foreach ($this->result AS $data)
-            {
-                $roads[$data['roadnumber']] = $data['roadnumber'];
-            }
-        }
-        
-        natsort($roads);
-        
-        return $roads;
-    }
-    
     public function getRecentWithLocation()
     {
         $this->db->select("locations.*, ndw.*, locations.type as location_type");

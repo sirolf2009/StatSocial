@@ -10,11 +10,18 @@ class Dashboard extends MY_Controller {
         {
             redirect('/');
         }
+        
+        $this->load->model('statistic_model');
     }
     
     public function index()
     {
-		$this->addView('pages/dashboard', array());
+        $highest = $this->statistic_model->get_highest();
+        
+        $data['highest'] = alert('info', 'De <strong>'.$highest->roadnumber.'</strong> is momenteel de weg met de meest irriterende files.', FALSE);
+        $data['dashboard'] = $this->statistic_model->get_dashboard();
+        
+		$this->addView('pages/dashboard', $data);
 		$this->viewPage("Dashboard");
     }
 }

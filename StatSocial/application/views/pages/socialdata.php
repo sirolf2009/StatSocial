@@ -125,7 +125,7 @@
             <script type="text/javascript">
             (function() {
                 function looper() {
-                    if (typeof jQuery=='undefined'){setTimeout(looper, 50);}
+                    if (typeof jQuery=='undefined'){setTimeout(looper, 50);return;}
                 
                     $(function() {
                         $('#pie').highcharts({

@@ -15,6 +15,7 @@
             <div class="collapse navbar-collapse" id="navbar">
                 <ul class="nav navbar-nav">
                     <li<?php echo is_active('dashboard', 1); ?>><a href="<?php echo base_url('dashboard'); ?>"><b class="glyphicon glyphicon-dashboard"></b> <span class="hidden-sm">Dashboard</span></a></li>
+                    <li<?php echo is_active('statistics', 1); ?>><a href="<?php echo base_url('statistics'); ?>"><b class="glyphicon glyphicon-stats"></b> <span class="hidden-sm">Statistieken</span></a></li>
                     <li<?php echo is_active('roaddata', 1); ?>><a href="<?php echo base_url('roaddata'); ?>"><b class="glyphicon glyphicon-road"></b> <span class="hidden-sm">Wegen data</span></a></li>
                     <li<?php echo is_active('socialdata', 1); ?>><a href="<?php echo base_url('socialdata'); ?>"><b class="glyphicon glyphicon-thumbs-up"></b> <span class="hidden-sm">Sociale data</span></a></li>  
                     <li<?php echo is_active('socialusers', 1); ?>><a href="<?php echo base_url('socialusers'); ?>"><b class="glyphicon glyphicon-user"></b> <span class="hidden-sm">Sociale gebruikers</span></a></li>  
