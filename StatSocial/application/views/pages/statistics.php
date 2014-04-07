@@ -4,7 +4,7 @@
     
     <ul class="nav nav-tabs">
         <li class="pull-right"><a href="#data" data-toggle="tab"><b class="glyphicon glyphicon-list-alt"></b> Gegevens</a></li>
-        <li class="pull-right active"><a href="#stat" data-toggle="tab"><b class="glyphicon glyphicon-stats"></b> Statestieken</a></li>
+        <li class="pull-right active"><a href="#stat" data-toggle="tab"><b class="glyphicon glyphicon-stats"></b> Statistieken</a></li>
         <?php if ( ! empty($logger)): ?>
         <li><i class="glyphicon glyphicon-flag"></i> Laatste gegevens opgehaald op: <?php echo date('d-m-Y \o\m H:i', $logger->date); ?></li>
         <?php endif; ?>
