@@ -223,27 +223,32 @@ class Post_Model extends MY_Model {
                 // only do something if we have any good posts... else skip it.
                 if (count($user_ids) > 0)
                 {
-                    $fql_ids = array_column(json_decode(json_encode($this->request->fql($user_ids)->data), TRUE), 'uid');
+                    $fql = $this->request->fql($user_ids);
                     
-                    foreach ($data->data  as $post)
+                    if (isset($fql->data) && ! empty($fql->data))
                     {
-                        if (in_array($post->from->id, $fql_ids))
+                        $fql_ids = array_column(json_decode(json_encode($fql->data), TRUE), 'uid');
+                        
+                        foreach ($data->data  as $post)
                         {
-                            $insert['post_id']      = substr($post->id, 16, 15);
-                            $insert['ndw_id']       = $ndw_id;
-                            $insert['social_id']    = $post->from->id;  
-                            $insert['type']         = 'FACEBOOK';
-                            $insert['term']         = $term;
-                            $insert['message']      = $this->emjoi_remover($post->message);
-                            $insert['date']         = strtotime($post->created_time);
-                                  
-                            // set the user in the global array for later..
-                            $this->users['FACEBOOK'][$post->from->id] = $post->from->name; 
-                            
-                            $this->db->reconnect();
-                            
-                            // insert the obtained data...             
-                            parent::insert($insert, TRUE);
+                            if (in_array($post->from->id, $fql_ids))
+                            {
+                                $insert['post_id']      = substr($post->id, 16, 15);
+                                $insert['ndw_id']       = $ndw_id;
+                                $insert['social_id']    = $post->from->id;  
+                                $insert['type']         = 'FACEBOOK';
+                                $insert['term']         = $term;
+                                $insert['message']      = $this->emjoi_remover($post->message);
+                                $insert['date']         = strtotime($post->created_time);
+                                      
+                                // set the user in the global array for later..
+                                $this->users['FACEBOOK'][$post->from->id] = $post->from->name; 
+                                
+                                $this->db->reconnect();
+                                
+                                // insert the obtained data...             
+                                parent::insert($insert, TRUE);
+                            }
                         }
                     }
                 }

@@ -10,7 +10,7 @@ class Account extends MY_Controller {
         }
         
         $error = FALSE;
-        
+
         if ($this->input->post('email') && $this->input->post('password'))
         {
             if (($error = $this->auth->login($this->input->post('email'), $this->input->post('password'))) === TRUE)
