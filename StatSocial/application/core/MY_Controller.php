@@ -9,7 +9,7 @@ class MY_Controller extends CI_Controller {
 	private $js = array();
 
 	public function __construct() {
-		parent::__construct();
+		parent::__construct();    
 	}
 
 	/**

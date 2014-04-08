@@ -35,7 +35,7 @@ class Sentiment {
         $positive = 0;
         $negative = 0;
 
-        $sql = "SELECT type, regex, false_positive, false_negative FROM `sentiments` WHERE MATCH (`regex`) AGAINST('".$this->db->escape_like_str($sentence)."') > 1.54321";
+        $sql = "SELECT type, regex, false_positive, false_negative FROM `sentiments` WHERE MATCH (`regex`) AGAINST('".$this->db->escape_like_str($sentence)."') > 2.4321 ORDER BY MATCH (`regex`) AGAINST('".$this->db->escape_like_str($sentence)."') DESC LIMIT 500";
         
         foreach($this->db->query($sql)->result() AS $result)
         {                                             

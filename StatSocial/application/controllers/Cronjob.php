@@ -36,16 +36,16 @@ class Cronjob extends CI_Controller {
         }
         
         // set the time limit to inifinite..
-        set_time_limit(0);
+        set_time_limit(300);
         
         // last but not least, try to put some sentiment values to the stored posts
         $this->post_model->where('positive', NULL);
         $this->post_model->where('negative', NULL);
-        foreach ($this->post_model->get_all() AS $post)
+        
+        foreach ($this->post_model->get_all() AS $i => $post)
         {
             $values = $this->sentiment->analyse($post->message, TRUE);
 
-            
             $this->post_model->reconnect();
             $this->post_model->update($post->id, $values, TRUE);
         } 

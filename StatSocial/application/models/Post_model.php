@@ -160,7 +160,7 @@ class Post_Model extends MY_Model {
         }
         
         // set the time limit to inifinite..
-        set_time_limit(0);
+        set_time_limit(300);
         
         // select the twitter driver..
         $this->request->select_driver('facebook');
@@ -181,7 +181,7 @@ class Post_Model extends MY_Model {
         $errors = 0;
         
         // while everything is going well and we are below the times amount and have less then 3 errors we can go
-        while($times < 5 && $errors < 3)
+        while($times < 1 && $errors < 3)
         {         
             // store the facebook user ids so we can check if the user has a dutch locale..
             $user_ids = array();
@@ -287,7 +287,7 @@ class Post_Model extends MY_Model {
         }
         
         // set the time limit to inifinite..
-        set_time_limit(0);
+        set_time_limit(300);
         
         // select the twitter driver..
         $this->request->select_driver('twitter');
@@ -308,7 +308,7 @@ class Post_Model extends MY_Model {
         $errors = 0;
         
         // while everything is going well and we are below the times amount and have less then 3 errors we can go
-        while($times < 5 && $errors < 3)
+        while($times < 1 && $errors < 3)
         {            
             // get the data...
             $data = $this->request->get($query); 
